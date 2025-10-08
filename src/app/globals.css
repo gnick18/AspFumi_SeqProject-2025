@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+:root {
+  /* Clean green and white color scheme */
+  --dark-green: #1b4d3e;
+  --forest-green: #2d6a4f;
+  --soft-green: #52b788;
+  --light-yellow: #fefce8;
+  --cream-yellow: #fef3c7;
+  --light-grey: #f8f9fa;
+  --medium-grey: #e9ecef;
+  --dark-grey: #6c757d;
+  --pure-white: #ffffff;
+  --text-black: #212529;
+
+  /* Primary theme colors */
+  --background: var(--pure-white);
+  --foreground: var(--text-black);
+  --primary: var(--dark-green);
+  --secondary: var(--forest-green);
+  --accent: var(--soft-green);
+  --popup-bg: var(--light-grey);
+  --nav-bg: var(--dark-green);
+  --nav-text: var(--pure-white);
+  --nav-highlight: var(--light-yellow);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Custom styles for navigation and layout */
+.nav-container {
+  background: var(--nav-bg);
+  border-bottom: 3px solid var(--soft-green);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-link {
+  color: var(--nav-text);
+  transition: all 0.3s ease;
+  background: transparent;
+  border-radius: 6px;
+  padding: 8px 16px;
+}
+
+.nav-link:hover {
+  color: var(--dark-green);
+  background: var(--nav-highlight);
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  color: var(--dark-green);
+  background: var(--nav-highlight);
+  font-weight: 600;
+}
+
+/* Popup and card styles */
+.popup-card {
+  background: var(--popup-bg);
+  border: 1px solid var(--medium-grey);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+/* Form styles */
+.form-input {
+  border: 2px solid var(--medium-grey);
+  background: var(--pure-white);
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: var(--soft-green);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.1);
+}
+
+.btn-primary {
+  background: var(--dark-green);
+  color: var(--pure-white);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: var(--forest-green);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(27, 77, 62, 0.3);
+}
+
+/* Custom map marker styles */
+.custom-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.leaflet-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
