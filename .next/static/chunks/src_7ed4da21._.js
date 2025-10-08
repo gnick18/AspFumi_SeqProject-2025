@@ -237,7 +237,6 @@ function AdminPage() {
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [activeTab, setActiveTab] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('metadata');
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    // --- Data Fetching ---
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "AdminPage.useEffect": ()=>{
             const loadAllData = {
@@ -245,7 +244,6 @@ function AdminPage() {
                     try {
                         setLoading(true);
                         setError(null);
-                        // Fetch both datasets in parallel
                         const [labRes, isolateRes] = await Promise.all([
                             fetch('/api/admin/metadata'),
                             fetch('/api/admin/isolates')
@@ -268,7 +266,6 @@ function AdminPage() {
             loadAllData();
         }
     }["AdminPage.useEffect"], []);
-    // --- Data Saving and Deleting Handlers ---
     const handleSave = async (updatedRow, endpoint)=>{
         try {
             const response = await fetch("/api/admin/".concat(endpoint), {
@@ -279,17 +276,16 @@ function AdminPage() {
                 body: JSON.stringify(updatedRow)
             });
             if (!response.ok) throw new Error('Failed to save data.');
-            // Refresh local data to show changes
             if (endpoint === 'metadata') {
                 setLabSubmissions((labs)=>labs.map((lab)=>lab.id === updatedRow.id ? updatedRow : lab));
             } else {
                 setIsolateSubmissions((isos)=>isos.map((iso)=>iso.id === updatedRow.id ? updatedRow : iso));
             }
-            return true; // Indicate success
-        } catch (error) {
-            console.error('Save failed:', error);
+            return true;
+        } catch (saveError) {
+            console.error('Save failed:', saveError);
             alert('Error saving data. Please check the console.');
-            return false; // Indicate failure
+            return false;
         }
     };
     const handleDelete = async (id, endpoint)=>{
@@ -305,18 +301,16 @@ function AdminPage() {
                 })
             });
             if (!response.ok) throw new Error('Failed to delete data.');
-            // Refresh local data
             if (endpoint === 'metadata') {
                 setLabSubmissions((labs)=>labs.filter((lab)=>lab.id !== id));
             } else {
                 setIsolateSubmissions((isolates)=>isolates.filter((iso)=>iso.id !== id));
             }
-        } catch (error) {
-            console.error('Delete failed:', error);
+        } catch (deleteError) {
+            console.error('Delete failed:', deleteError);
             alert('Error deleting data. Please check the console.');
         }
     };
-    // --- Column Definitions for the Tables ---
     const labColumns = [
         {
             key: 'lab_name',
@@ -375,17 +369,11 @@ function AdminPage() {
             type: 'textarea'
         }
     ];
-    // --- Summary Statistics ---
-    const labIsolateCounts = labSubmissions.reduce((acc, lab)=>{
-        const count = isolateSubmissions.filter((iso)=>iso.submitting_lab === lab.lab_name).length;
-        acc[lab.lab_name] = count;
-        return acc;
-    }, {});
     if (loading) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         children: "Loading Admin Dashboard..."
     }, void 0, false, {
         fileName: "[project]/src/app/admin/page.tsx",
-        lineNumber: 161,
+        lineNumber: 136,
         columnNumber: 23
     }, this);
     if (error) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -393,7 +381,7 @@ function AdminPage() {
         children: error
     }, void 0, false, {
         fileName: "[project]/src/app/admin/page.tsx",
-        lineNumber: 162,
+        lineNumber: 137,
         columnNumber: 21
     }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -404,7 +392,7 @@ function AdminPage() {
                 children: "Admin Dashboard"
             }, void 0, false, {
                 fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 166,
+                lineNumber: 141,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -418,21 +406,21 @@ function AdminPage() {
                                 children: labSubmissions.length
                             }, void 0, false, {
                                 fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 171,
-                                columnNumber: 13
+                                lineNumber: 143,
+                                columnNumber: 60
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-sm text-blue-600",
                                 children: "Total Labs Submitted"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 172,
-                                columnNumber: 13
+                                lineNumber: 143,
+                                columnNumber: 135
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 170,
+                        lineNumber: 143,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -443,21 +431,21 @@ function AdminPage() {
                                 children: isolateSubmissions.length
                             }, void 0, false, {
                                 fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 175,
-                                columnNumber: 13
+                                lineNumber: 144,
+                                columnNumber: 61
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-sm text-green-600",
                                 children: "Total Isolates Submitted"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 176,
-                                columnNumber: 13
+                                lineNumber: 144,
+                                columnNumber: 141
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 174,
+                        lineNumber: 144,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -468,27 +456,27 @@ function AdminPage() {
                                 children: labSubmissions.length > 0 ? (isolateSubmissions.length / labSubmissions.length).toFixed(1) : 0
                             }, void 0, false, {
                                 fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 179,
-                                columnNumber: 13
+                                lineNumber: 145,
+                                columnNumber: 62
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-sm text-purple-600",
                                 children: "Avg. Isolates per Lab"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 182,
-                                columnNumber: 13
+                                lineNumber: 145,
+                                columnNumber: 212
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 178,
-                        columnNumber: 10
+                        lineNumber: 145,
+                        columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 169,
+                lineNumber: 142,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -504,7 +492,7 @@ function AdminPage() {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 188,
+                        lineNumber: 148,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -517,13 +505,13 @@ function AdminPage() {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 191,
+                        lineNumber: 149,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 187,
+                lineNumber: 147,
                 columnNumber: 7
             }, this),
             activeTab === 'metadata' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$EditableTable$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -533,7 +521,7 @@ function AdminPage() {
                 onDelete: (id)=>handleDelete(id, 'metadata')
             }, void 0, false, {
                 fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 198,
+                lineNumber: 152,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$EditableTable$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 columns: isolateColumns,
@@ -542,13 +530,13 @@ function AdminPage() {
                 onDelete: (id)=>handleDelete(id, 'isolates')
             }, void 0, false, {
                 fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 205,
+                lineNumber: 154,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/admin/page.tsx",
-        lineNumber: 165,
+        lineNumber: 140,
         columnNumber: 5
     }, this);
 }

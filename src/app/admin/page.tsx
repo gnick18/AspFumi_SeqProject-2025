@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import EditableTable from '@/components/EditableTable'; // Corrected the import path
+import type { Column } from '@/components/EditableTable';
 
 // --- Interfaces for our data ---
 export interface LabMetadata {
@@ -38,13 +39,6 @@ export interface IsolateData {
   other_mutations: string;
 }
 
-// --- Interface for table column definitions ---
-interface Column {
-  key: string;
-  header: string;
-  type?: 'text' | 'textarea';
-}
-
 export default function AdminPage() {
   const [labSubmissions, setLabSubmissions] = useState<LabMetadata[]>([]);
   const [isolateSubmissions, setIsolateSubmissions] = useState<IsolateData[]>([]);
@@ -52,13 +46,11 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<'metadata' | 'isolates'>('metadata');
   const [error, setError] = useState<string | null>(null);
 
-  // --- Data Fetching ---
   useEffect(() => {
     const loadAllData = async () => {
       try {
         setLoading(true);
         setError(null);
-        // Fetch both datasets in parallel
         const [labRes, isolateRes] = await Promise.all([
           fetch('/api/admin/metadata'),
           fetch('/api/admin/isolates')
@@ -84,8 +76,7 @@ export default function AdminPage() {
     loadAllData();
   }, []);
 
-  // --- Data Saving and Deleting Handlers ---
-  const handleSave = async (updatedRow: any, endpoint: 'metadata' | 'isolates') => {
+  const handleSave = async (updatedRow: LabMetadata | IsolateData, endpoint: 'metadata' | 'isolates') => {
     try {
       const response = await fetch(`/api/admin/${endpoint}`, {
         method: 'PUT',
@@ -94,17 +85,16 @@ export default function AdminPage() {
       });
       if (!response.ok) throw new Error('Failed to save data.');
       
-      // Refresh local data to show changes
       if (endpoint === 'metadata') {
-        setLabSubmissions(labs => labs.map(lab => lab.id === updatedRow.id ? updatedRow : lab));
+        setLabSubmissions(labs => labs.map(lab => lab.id === updatedRow.id ? (updatedRow as LabMetadata) : lab));
       } else {
-        setIsolateSubmissions(isos => isos.map(iso => iso.id === updatedRow.id ? updatedRow : iso));
+        setIsolateSubmissions(isos => isos.map(iso => iso.id === updatedRow.id ? (updatedRow as IsolateData) : iso));
       }
-      return true; // Indicate success
-    } catch (error) {
-      console.error('Save failed:', error);
+      return true;
+    } catch (saveError) {
+      console.error('Save failed:', saveError);
       alert('Error saving data. Please check the console.');
-      return false; // Indicate failure
+      return false;
     }
   };
   
@@ -118,45 +108,30 @@ export default function AdminPage() {
       });
        if (!response.ok) throw new Error('Failed to delete data.');
        
-       // Refresh local data
        if (endpoint === 'metadata') {
          setLabSubmissions(labs => labs.filter(lab => lab.id !== id));
        } else {
          setIsolateSubmissions(isolates => isolates.filter(iso => iso.id !== id));
        }
-    } catch (error) {
-       console.error('Delete failed:', error);
+    } catch (deleteError) {
+       console.error('Delete failed:', deleteError);
        alert('Error deleting data. Please check the console.');
     }
   };
 
-
-  // --- Column Definitions for the Tables ---
   const labColumns: Column[] = [
-    { key: 'lab_name', header: 'Lab Name' },
-    { key: 'institution', header: 'Institution' },
-    { key: 'city', header: 'City' },
-    { key: 'country', header: 'Country' },
-    { key: 'contact_email', header: 'Contact' },
-    { key: 'latitude', header: 'Lat' },
-    { key: 'longitude', header: 'Lng' },
-    { key: 'match_level', header: 'Match' },
+    { key: 'lab_name', header: 'Lab Name' }, { key: 'institution', header: 'Institution' },
+    { key: 'city', header: 'City' }, { key: 'country', header: 'Country' },
+    { key: 'contact_email', header: 'Contact' }, { key: 'latitude', header: 'Lat' },
+    { key: 'longitude', header: 'Lng' }, { key: 'match_level', header: 'Match' },
   ];
 
   const isolateColumns: Column[] = [
-    { key: 'submitting_lab', header: 'Submitting Lab' },
-    { key: 'strain_name', header: 'Strain Name' },
+    { key: 'submitting_lab', header: 'Submitting Lab' }, { key: 'strain_name', header: 'Strain Name' },
     { key: 'strain_origin', header: 'Origin' },
     { key: 'genotype_details_json', header: 'Genotype (JSON)', type: 'textarea' },
     { key: 'other_genes_json', header: 'Other Genes (JSON)', type: 'textarea' },
   ];
-
-  // --- Summary Statistics ---
-  const labIsolateCounts = labSubmissions.reduce((acc, lab) => {
-    const count = isolateSubmissions.filter(iso => iso.submitting_lab === lab.lab_name).length;
-    acc[lab.lab_name] = count;
-    return acc;
-  }, {} as Record<string, number>);
 
   if (loading) return <div>Loading Admin Dashboard...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
@@ -164,52 +139,20 @@ export default function AdminPage() {
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6">
       <h1 className="text-2xl md:text-3xl font-bold mb-6">Admin Dashboard</h1>
-
-      {/* Summary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="p-4 bg-blue-100 rounded-lg shadow">
-            <p className="text-3xl font-bold text-blue-800">{labSubmissions.length}</p>
-            <p className="text-sm text-blue-600">Total Labs Submitted</p>
-        </div>
-        <div className="p-4 bg-green-100 rounded-lg shadow">
-            <p className="text-3xl font-bold text-green-800">{isolateSubmissions.length}</p>
-            <p className="text-sm text-green-600">Total Isolates Submitted</p>
-        </div>
-         <div className="p-4 bg-purple-100 rounded-lg shadow">
-            <p className="text-3xl font-bold text-purple-800">
-              {labSubmissions.length > 0 ? (isolateSubmissions.length / labSubmissions.length).toFixed(1) : 0}
-            </p>
-            <p className="text-sm text-purple-600">Avg. Isolates per Lab</p>
-        </div>
+        <div className="p-4 bg-blue-100 rounded-lg shadow"><p className="text-3xl font-bold text-blue-800">{labSubmissions.length}</p><p className="text-sm text-blue-600">Total Labs Submitted</p></div>
+        <div className="p-4 bg-green-100 rounded-lg shadow"><p className="text-3xl font-bold text-green-800">{isolateSubmissions.length}</p><p className="text-sm text-green-600">Total Isolates Submitted</p></div>
+        <div className="p-4 bg-purple-100 rounded-lg shadow"><p className="text-3xl font-bold text-purple-800">{labSubmissions.length > 0 ? (isolateSubmissions.length / labSubmissions.length).toFixed(1) : 0}</p><p className="text-sm text-purple-600">Avg. Isolates per Lab</p></div>
       </div>
-
-      {/* Tabs */}
       <div className="flex border-b mb-4">
-        <button onClick={() => setActiveTab('metadata')} className={`py-2 px-4 ${activeTab === 'metadata' ? 'border-b-2 border-blue-500 font-semibold' : ''}`}>
-          Lab Metadata ({labSubmissions.length})
-        </button>
-        <button onClick={() => setActiveTab('isolates')} className={`py-2 px-4 ${activeTab === 'isolates' ? 'border-b-2 border-blue-500 font-semibold' : ''}`}>
-          Isolate Submissions ({isolateSubmissions.length})
-        </button>
+        <button onClick={() => setActiveTab('metadata')} className={`py-2 px-4 ${activeTab === 'metadata' ? 'border-b-2 border-blue-500 font-semibold' : ''}`}>Lab Metadata ({labSubmissions.length})</button>
+        <button onClick={() => setActiveTab('isolates')} className={`py-2 px-4 ${activeTab === 'isolates' ? 'border-b-2 border-blue-500 font-semibold' : ''}`}>Isolate Submissions ({isolateSubmissions.length})</button>
       </div>
-
-      {/* Tables */}
       {activeTab === 'metadata' ? (
-        <EditableTable
-          columns={labColumns}
-          data={labSubmissions}
-          onSave={(row) => handleSave(row, 'metadata')}
-          onDelete={(id) => handleDelete(id, 'metadata')}
-        />
+        <EditableTable columns={labColumns} data={labSubmissions} onSave={(row) => handleSave(row, 'metadata')} onDelete={(id) => handleDelete(id, 'metadata')} />
       ) : (
-        <EditableTable
-          columns={isolateColumns}
-          data={isolateSubmissions}
-          onSave={(row) => handleSave(row, 'isolates')}
-          onDelete={(id) => handleDelete(id, 'isolates')}
-        />
+        <EditableTable columns={isolateColumns} data={isolateSubmissions} onSave={(row) => handleSave(row, 'isolates')} onDelete={(id) => handleDelete(id, 'isolates')} />
       )}
     </div>
   );
 }
-
