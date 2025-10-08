@@ -54,7 +54,6 @@ export default function IsolateForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
-  // --- NEW: State for the dropdown list ---
   const [labNames, setLabNames] = useState<string[]>([]);
   const [loadingLabs, setLoadingLabs] = useState(true);
 
@@ -77,20 +76,22 @@ export default function IsolateForm() {
     sharingLabLocation: '',
   });
 
-  // --- NEW: Effect to fetch lab names when the component mounts ---
   useEffect(() => {
     const fetchLabNames = async () => {
       try {
+        setLoadingLabs(true);
         const response = await fetch('/api/labs');
         if (response.ok) {
           const data = await response.json();
           if (data.success && Array.isArray(data.labs)) {
             const validNames = data.labs
-              .map((lab: any) => lab.name)
-              .filter((name: any): name is string => name && typeof name === 'string');
+              .map((lab: { name: string }) => lab.name)
+              .filter((name): name is string => typeof name === 'string' && name.length > 0);
             
             const uniqueNames = [...new Set(validNames)];
             
+            // FIX: The missing piece was here. We need to update the state with the fetched names.
+            setLabNames(uniqueNames.sort((a, b) => a.localeCompare(b)));
           }
         }
       } catch (error) {
@@ -99,11 +100,11 @@ export default function IsolateForm() {
         setLoadingLabs(false);
       }
     };
-    // Fetch names only after authentication
+    
     if (isAuthenticated) {
         fetchLabNames();
     }
-  }, [isAuthenticated]); // Rerun this effect when the user authenticates
+  }, [isAuthenticated]);
 
   const handlePasswordSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -117,11 +118,11 @@ export default function IsolateForm() {
   
   const handleFormChange = (field: string, value: string) => {
     setFormData(prev => {
-        let newState = JSON.parse(JSON.stringify(prev)); // Deep copy to avoid state mutation issues
+        const newState = JSON.parse(JSON.stringify(prev));
 
         if (field.startsWith('genotype.')) {
             const [, mutation, key] = field.split('.');
-            let mutationState = newState.genotype[mutation as keyof GenotypeInfo];
+            const mutationState = newState.genotype[mutation as keyof GenotypeInfo];
             (mutationState as any)[key] = value;
             if (key === 'present' && value !== 'Yes') {
                 Object.keys(mutationState).forEach(k => { if (k !== 'present') (mutationState as any)[k] = ''; });
@@ -135,7 +136,7 @@ export default function IsolateForm() {
         else if (field.startsWith('otherGenes.')) {
             const [, indexStr, key] = field.split('.');
             const index = parseInt(indexStr, 10);
-            let geneState = newState.otherGenes[index];
+            const geneState = newState.otherGenes[index];
             (geneState as any)[key] = value;
             if (key === 'method') {
                 geneState.markerGene = '';
@@ -182,7 +183,7 @@ export default function IsolateForm() {
       if (response.ok) {
         const result = await response.json();
         setSubmitMessage(result.message || 'Isolate information submitted successfully!');
-        setFormData(prev => ({ // Reset form but keep lab name
+        setFormData(prev => ({ 
             ...prev,
             strainName: '',
             genotype: {
@@ -245,7 +246,6 @@ export default function IsolateForm() {
 
       <form onSubmit={handleFormSubmit} className="space-y-6 bg-white/50 p-8 rounded-lg shadow-md">
         
-        {/* --- MODIFIED: Lab Name Dropdown --- */}
         <div>
           <label htmlFor="submittingLab" className="block text-sm font-medium mb-2">Submitting Laboratory Name *</label>
           <select 
