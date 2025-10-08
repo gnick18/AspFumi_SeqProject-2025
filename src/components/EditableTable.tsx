@@ -3,22 +3,21 @@
 import { useState } from 'react';
 
 // --- TYPE DEFINITIONS ---
-interface Column {
+export interface Column {
   key: string;
   header: string;
-  type?: 'text' | 'textarea'; // Allows for different input types
+  type?: 'text' | 'textarea'; 
 }
 
-interface EditableTableProps {
+// Use a generic type 'T' that must be an object with an 'id' property
+interface EditableTableProps<T extends { id: string }> {
   columns: Column[];
-  data: any[];
-  onSave: (updatedRow: any) => Promise<boolean>;
+  data: T[];
+  onSave: (updatedRow: T) => Promise<boolean>;
   onDelete: (id: string) => Promise<void>;
 }
 
-// --- ROW COMPONENT ---
-// Manages the state for a single row (viewing vs. editing)
-const EditableRow = ({ row, columns, onSave, onDelete }: { row: any, columns: Column[], onSave: (updatedRow: any) => Promise<boolean>, onDelete: (id: string) => Promise<void> }) => {
+const EditableRow = <T extends { id: string }>({ row, columns, onSave, onDelete }: { row: T, columns: Column[], onSave: (updatedRow: T) => Promise<boolean>, onDelete: (id: string) => Promise<void> }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [rowData, setRowData] = useState(row);
   const [isSaving, setIsSaving] = useState(false);
@@ -43,7 +42,7 @@ const EditableRow = ({ row, columns, onSave, onDelete }: { row: any, columns: Co
           {isEditing ? (
             col.type === 'textarea' ? (
               <textarea
-                value={rowData[col.key]}
+                value={rowData[col.key as keyof T] as string}
                 onChange={(e) => handleChange(col.key, e.target.value)}
                 className="w-full p-1 border rounded text-xs"
                 rows={4}
@@ -51,13 +50,13 @@ const EditableRow = ({ row, columns, onSave, onDelete }: { row: any, columns: Co
             ) : (
               <input
                 type="text"
-                value={rowData[col.key]}
+                value={rowData[col.key as keyof T] as string}
                 onChange={(e) => handleChange(col.key, e.target.value)}
                 className="w-full p-1 border rounded"
               />
             )
           ) : (
-            <span className="line-clamp-2">{rowData[col.key]}</span>
+            <span className="line-clamp-2">{rowData[col.key as keyof T] as string}</span>
           )}
         </td>
       ))}
@@ -86,9 +85,7 @@ const EditableRow = ({ row, columns, onSave, onDelete }: { row: any, columns: Co
   );
 };
 
-
-// --- MAIN TABLE COMPONENT ---
-const EditableTable = ({ columns, data, onSave, onDelete }: EditableTableProps) => {
+const EditableTable = <T extends { id: string }>({ columns, data, onSave, onDelete }: EditableTableProps<T>) => {
   if (!data || data.length === 0) {
     return <p className="text-gray-500">No data available.</p>;
   }
