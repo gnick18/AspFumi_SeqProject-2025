@@ -84,14 +84,13 @@ export default function IsolateForm() {
         if (response.ok) {
           const data = await response.json();
           if (data.success && Array.isArray(data.labs)) {
-            // FIX 1: Made types more specific
             const validNames = data.labs
               .map((lab: { name: string }) => lab.name)
-              .filter((name): name is string => typeof name === 'string' && name.length > 0);
+              // FIX 1: Explicitly typed 'name' as a string
+              .filter((name: string): name is string => typeof name === 'string' && name.length > 0);
             
             const uniqueNames = [...new Set(validNames)];
             
-            // FIX 2: Added the missing setLabNames call
             setLabNames(uniqueNames.sort((a, b) => a.localeCompare(b)));
           }
         }
@@ -119,31 +118,33 @@ export default function IsolateForm() {
   
   const handleFormChange = (field: string, value: string) => {
     setFormData(prev => {
-        // FIX 3: Changed 'let' to 'const'
+        // FIX 2: Changed 'let' to 'const'
         const newState = JSON.parse(JSON.stringify(prev));
 
         if (field.startsWith('genotype.')) {
             const [, mutation, key] = field.split('.');
-            const mutationState = newState.genotype[mutation as keyof GenotypeInfo];
-            (mutationState as Record<string, string>)[key] = value;
+            // FIX 3: Changed 'let' to 'const' and specified type
+            const mutationState = newState.genotype[mutation as keyof GenotypeInfo] as Record<string, string>;
+            mutationState[key] = value;
             if (key === 'present' && value !== 'Yes') {
-                Object.keys(mutationState).forEach(k => { if (k !== 'present') (mutationState as Record<string, string>)[k] = ''; });
+                Object.keys(mutationState).forEach(k => { if (k !== 'present') mutationState[k] = ''; });
             }
             if (key === 'method') {
-                mutationState.markerGene = '';
-                mutationState.chemicalName = '';
-                mutationState.otherMethod = '';
+                (newState.genotype[mutation as keyof GenotypeInfo] as MutationInfo).markerGene = '';
+                (newState.genotype[mutation as keyof GenotypeInfo] as MutationInfo).chemicalName = '';
+                (newState.genotype[mutation as keyof GenotypeInfo] as MutationInfo).otherMethod = '';
             }
         } 
         else if (field.startsWith('otherGenes.')) {
             const [, indexStr, key] = field.split('.');
             const index = parseInt(indexStr, 10);
-            const geneState = newState.otherGenes[index];
-            (geneState as Record<string, string>)[key] = value;
+            // FIX 4: Changed 'let' to 'const' and specified type
+            const geneState = newState.otherGenes[index] as Record<string, string>;
+            geneState[key] = value;
             if (key === 'method') {
-                geneState.markerGene = '';
-                geneState.chemicalName = '';
-                geneState.otherMethod = '';
+                (newState.otherGenes[index] as MutationInfo).markerGene = '';
+                (newState.otherGenes[index] as MutationInfo).chemicalName = '';
+                (newState.otherGenes[index] as MutationInfo).otherMethod = '';
             }
         }
         else {
@@ -173,7 +174,8 @@ export default function IsolateForm() {
         setSubmitMessage(result.message || 'Isolate information submitted successfully!');
         setFormData(prev => ({ ...prev, strainName: '', genotype: { ku: { present: '', complemented: '', kuType: '', method: '', markerGene: '', chemicalName: '', otherMethod: '', mutationDate: '' }, pyrG: { present: '', complemented: '', method: '', markerGene: '', chemicalName: '', otherMethod: '', mutationDate: '' }, argB: { present: '', complemented: '', method: '', markerGene: '', chemicalName: '', otherMethod: '', mutationDate: '' }}, otherGenes: [], otherMutations: '', strainOrigin: '', strainCenterName: '', strainCenterLocation: '', strainCenterDate: '', sharingLabName: '', sharingLabInstitute: '', sharingLabLocation: '' }));
       } else { setSubmitMessage('Error submitting form. Please try again.'); }
-    } catch { // FIX 4: Removed unused 'error' variable
+    // FIX 5: Removed unused 'error' variable
+    } catch {
       setSubmitMessage('Error submitting form. Please try again.');
     } finally { setIsSubmitting(false); }
   };
@@ -230,7 +232,7 @@ export default function IsolateForm() {
         </div>
         <div className="space-y-2 p-4 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}><h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--slate-gray)' }}>Genotype Information</h3><MutationRow mutationName="Δku Mutation?" mutationKey="ku" isKu /><MutationRow mutationName="ΔpyrG Mutation?" mutationKey="pyrG" /><MutationRow mutationName="ΔargB Mutation?" mutationKey="argB" /></div>
         <div className="space-y-2 p-4 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}><h3 className="text-lg font-semibold bg-gray-700 text-white p-2 rounded-md">Add Additional Gene Mutation Information</h3>{formData.otherGenes.map((gene, index) => (<div key={index} className="p-3 border rounded-md bg-gray-50 relative"><button type="button" onClick={() => removeOtherGene(index)} className="absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold">X</button><div className="grid md:grid-cols-3 gap-4 items-center"><label className="font-medium text-sm">Gene Name:</label><input type="text" value={gene.geneName} onChange={(e) => handleFormChange(`otherGenes.${index}.geneName`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" placeholder="e.g., ΔabcA"/></div><div className="grid md:grid-cols-3 gap-4 items-start pt-2 mt-2 border-t"><label className="font-medium text-sm pt-2">Details for {gene.geneName || 'this gene'}:</label><div className="md:col-span-2 space-y-3"><div className="grid grid-cols-3 gap-4 items-center"><label className="text-sm italic">Complemented?</label><select value={gene.complemented} onChange={(e) => handleFormChange(`otherGenes.${index}.complemented`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}><option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option></select></div><div className="grid grid-cols-3 gap-4 items-start"><label className="text-sm italic pt-2">Method:</label><div className="col-span-2 space-y-2"><select value={gene.method} onChange={(e) => handleFormChange(`otherGenes.${index}.method`, e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}><option value="">Select Method...</option><option value="Homologous Recombination">Homologous Recombination</option><option value="UV Mutagenesis">UV Mutagenesis</option><option value="Chemical Mutagenesis">Chemical Mutagenesis</option><option value="CRISPR">CRISPR</option><option value="Other">Other (Please specify)</option><option value="Unknown">Unknown</option></select>{gene.method === 'Homologous Recombination' && <input type="text" value={gene.markerGene} onChange={(e) => handleFormChange(`otherGenes.${index}.markerGene`, e.target.value)} className="w-full p-2 border-2 rounded-lg" placeholder="Specify marker gene" />}{gene.method === 'Chemical Mutagenesis' && <input type="text" value={gene.chemicalName} onChange={(e) => handleFormChange(`otherGenes.${index}.chemicalName`, e.target.value)} className="w-full p-2 border-2 rounded-lg" placeholder="Specify chemical" />}{gene.method === 'Other' && <input type="text" value={gene.otherMethod} onChange={(e) => handleFormChange(`otherGenes.${index}.otherMethod`, e.target.value)} className="w-full p-2 border-2 rounded-lg" placeholder="Specify other method" />}</div></div><div className="grid grid-cols-3 gap-4 items-center"><label className="text-sm italic">Mutation Date (Optional):</label><input type="date" value={gene.mutationDate} onChange={(e) => handleFormChange(`otherGenes.${index}.mutationDate`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} /></div></div></div></div>))}<button type="button" onClick={addOtherGene} className="mt-2 text-sm font-medium text-blue-600 hover:text-blue-800">+ Add Another Gene</button></div>
-        <div className="space-y-2 p-4 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}><h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--slate-gray)' }}>Strain Origin</h3><select value={formData.strainOrigin} onChange={(e) => handleFormChange('strainOrigin', e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}><option value="">Select origin...</option><option value="Strain Center">From a Strain Center</option><option value="Shared by Lab">Shared by Another Lab</option><option value="In-house">Generated In-house</option></select>{formData.strainOrigin === 'Strain Center' && (<div className="grid md:grid-cols-3 gap-4 mt-2 p-2 bg-gray-50 rounded"><input type="text" value={formData.strainCenterName} onChange={(e) => handleFormChange('strainCenterName', e.target.value)} className="p-2 border rounded" placeholder="Name of Center" /><input type="text" value={formData.strainCenterLocation} onChange={(e) => handleFormChange('strainCenterLocation', e.target.value)} className="p-2 border rounded" placeholder="Location of Center" /><input type="date" value={formData.strainCenterDate} onChange={(e) => handleFormChange('strainCenterDate', e.target.value)} className="p-2 border rounded" placeholder="Date Sent" /></div>)}{formData.strainOrigin === 'Shared by Lab' && (<div className="grid md:grid-cols-3 gap-4 mt-2 p-2 bg-gray-50 rounded"><input type="text" value={formData.sharingLabName} onChange={(e) => handleFormChange('sharingLabName', e.target.value)} className="p-2 border rounded" placeholder="Name of Lab" /><input type="text" value={formData.sharingLabInstitute} onChange={(e) => handleFormChange('sharingLabInstitute', e.g.target.value)} className="p-2 border rounded" placeholder="Institute of Lab" /><input type="text" value={formData.sharingLabLocation} onChange={(e) => handleFormChange('sharingLabLocation', e.target.value)} className="p-2 border rounded" placeholder="Location of Lab" /></div>)}</div>
+        <div className="space-y-2 p-4 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}><h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--slate-gray)' }}>Strain Origin</h3><select value={formData.strainOrigin} onChange={(e) => handleFormChange('strainOrigin', e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}><option value="">Select origin...</option><option value="Strain Center">From a Strain Center</option><option value="Shared by Lab">Shared by Another Lab</option><option value="In-house">Generated In-house</option></select>{formData.strainOrigin === 'Strain Center' && (<div className="grid md:grid-cols-3 gap-4 mt-2 p-2 bg-gray-50 rounded"><input type="text" value={formData.strainCenterName} onChange={(e) => handleFormChange('strainCenterName', e.target.value)} className="p-2 border rounded" placeholder="Name of Center" /><input type="text" value={formData.strainCenterLocation} onChange={(e) => handleFormChange('strainCenterLocation', e.target.value)} className="p-2 border rounded" placeholder="Location of Center" /><input type="date" value={formData.strainCenterDate} onChange={(e) => handleFormChange('strainCenterDate', e.target.value)} className="p-2 border rounded" placeholder="Date Sent" /></div>)}{formData.strainOrigin === 'Shared by Lab' && (<div className="grid md:grid-cols-3 gap-4 mt-2 p-2 bg-gray-50 rounded"><input type="text" value={formData.sharingLabName} onChange={(e) => handleFormChange('sharingLabName', e.target.value)} className="p-2 border rounded" placeholder="Name of Lab" /><input type="text" value={formData.sharingLabInstitute} onChange={(e) => handleFormChange('sharingLabInstitute', e.target.value)} className="p-2 border rounded" placeholder="Institute of Lab" /><input type="text" value={formData.sharingLabLocation} onChange={(e) => handleFormChange('sharingLabLocation', e.target.value)} className="p-2 border rounded" placeholder="Location of Lab" /></div>)}</div>
         <div><label htmlFor="otherMutations" className="block text-sm font-medium mb-2">Other General Genotype Info</label><textarea id="otherMutations" value={formData.otherMutations} onChange={(e) => handleFormChange('otherMutations', e.target.value)} rows={3} className="w-full p-3 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., Reporter::GFP, general strain background notes, etc." /></div>
         {submitMessage && (<div className={`p-4 rounded-lg text-center ${submitMessage.includes('Error') ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>{submitMessage}</div>)}
         <div className="flex justify-end"><button type="submit" disabled={isSubmitting} className="px-8 py-3 rounded-lg font-medium btn-primary disabled:opacity-50">{isSubmitting ? 'Submitting...' : 'Submit Isolate'}</button></div>
@@ -238,4 +240,3 @@ export default function IsolateForm() {
     </div>
   );
 }
-
