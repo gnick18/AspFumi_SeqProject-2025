@@ -86,10 +86,10 @@ export default function IsolateForm() {
           if (data.success && Array.isArray(data.labs)) {
             const validNames = data.labs
               .map((lab: { name: string }) => lab.name)
-              // FIX 1: Explicitly typed 'name' as a string
               .filter((name: string): name is string => typeof name === 'string' && name.length > 0);
             
-            const uniqueNames = [...new Set(validNames)];
+            // FIX: Changed to Array.from() to preserve the string[] type.
+            const uniqueNames = Array.from(new Set(validNames));
             
             setLabNames(uniqueNames.sort((a, b) => a.localeCompare(b)));
           }
@@ -118,12 +118,10 @@ export default function IsolateForm() {
   
   const handleFormChange = (field: string, value: string) => {
     setFormData(prev => {
-        // FIX 2: Changed 'let' to 'const'
         const newState = JSON.parse(JSON.stringify(prev));
 
         if (field.startsWith('genotype.')) {
             const [, mutation, key] = field.split('.');
-            // FIX 3: Changed 'let' to 'const' and specified type
             const mutationState = newState.genotype[mutation as keyof GenotypeInfo] as Record<string, string>;
             mutationState[key] = value;
             if (key === 'present' && value !== 'Yes') {
@@ -138,7 +136,6 @@ export default function IsolateForm() {
         else if (field.startsWith('otherGenes.')) {
             const [, indexStr, key] = field.split('.');
             const index = parseInt(indexStr, 10);
-            // FIX 4: Changed 'let' to 'const' and specified type
             const geneState = newState.otherGenes[index] as Record<string, string>;
             geneState[key] = value;
             if (key === 'method') {
@@ -174,7 +171,6 @@ export default function IsolateForm() {
         setSubmitMessage(result.message || 'Isolate information submitted successfully!');
         setFormData(prev => ({ ...prev, strainName: '', genotype: { ku: { present: '', complemented: '', kuType: '', method: '', markerGene: '', chemicalName: '', otherMethod: '', mutationDate: '' }, pyrG: { present: '', complemented: '', method: '', markerGene: '', chemicalName: '', otherMethod: '', mutationDate: '' }, argB: { present: '', complemented: '', method: '', markerGene: '', chemicalName: '', otherMethod: '', mutationDate: '' }}, otherGenes: [], otherMutations: '', strainOrigin: '', strainCenterName: '', strainCenterLocation: '', strainCenterDate: '', sharingLabName: '', sharingLabInstitute: '', sharingLabLocation: '' }));
       } else { setSubmitMessage('Error submitting form. Please try again.'); }
-    // FIX 5: Removed unused 'error' variable
     } catch {
       setSubmitMessage('Error submitting form. Please try again.');
     } finally { setIsSubmitting(false); }
