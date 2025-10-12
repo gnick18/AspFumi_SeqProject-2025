@@ -18,12 +18,13 @@ async function readTsv(): Promise<IsolateData[]> {
   try {
     await fs.access(tsvFilePath);
     const fileContent = await fs.readFile(tsvFilePath, 'utf-8');
-    const records = parse(fileContent, {
+    // FIX 1: Replaced 'any' with a more specific type
+    const records: Record<string, string>[] = parse(fileContent, {
       delimiter: '\t',
       columns: true,
       skip_empty_lines: true,
     });
-    return records.map((rec: any, index: number) => ({ id: rec.timestamp || `row-${index}`, ...rec }));
+    return records.map((rec) => ({ id: rec.timestamp, ...rec }));
   } catch {
     return [];
   }
@@ -41,7 +42,8 @@ async function writeData(data: IsolateData[]) {
     }
 
     // Write to JSON
-    const dataToWriteJson = data.map(({ id, ...rest }) => ({id, ...rest}));
+    // FIX 2: Simplified the map function to remove the 'id defined but never used' warning.
+    const dataToWriteJson = data.map(item => ({...item}));
     await fs.writeFile(jsonFilePath, JSON.stringify(dataToWriteJson, null, 2));
 }
 
@@ -54,7 +56,8 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   const updatedRow: IsolateData = await request.json();
-  let submissions = await readTsv();
+  // FIX 3: Changed 'let' to 'const'
+  const submissions = await readTsv();
   const index = submissions.findIndex(s => s.id === updatedRow.id);
 
   if (index === -1) {
@@ -69,7 +72,8 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const { id } = await request.json();
-  let submissions = await readTsv();
+  // FIX 4: Changed 'let' to 'const'
+  const submissions = await readTsv();
   const filteredSubmissions = submissions.filter(s => s.id !== id);
   
   if (submissions.length === filteredSubmissions.length) {

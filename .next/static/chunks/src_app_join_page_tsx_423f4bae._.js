@@ -9,8 +9,9 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 'use client';
 ;
-// Note: 'next/link' has been removed to resolve a build error. Standard <a> tags are used instead.
-// Helper component for SVG icons to keep the main component cleaner
+// Note: Using standard <a> tags for navigation to resolve a persistent build error with 'next/link'.
+// The Link component can be restored if the project's build configuration is adjusted.
+// Helper component for SVG icons
 const Icon = (param)=>{
     let { path, className } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -24,17 +25,16 @@ const Icon = (param)=>{
             clipRule: "evenodd"
         }, void 0, false, {
             fileName: "[project]/src/app/join/page.tsx",
-            lineNumber: 8,
+            lineNumber: 9,
             columnNumber: 5
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/src/app/join/page.tsx",
-        lineNumber: 7,
+        lineNumber: 8,
         columnNumber: 3
     }, ("TURBOPACK compile-time value", void 0));
 };
 _c = Icon;
-// This array correctly defines all four steps.
 const steps = [
     {
         number: '1',
@@ -69,7 +69,7 @@ function Join() {
                 children: "Join Our Initiative"
             }, void 0, false, {
                 fileName: "[project]/src/app/join/page.tsx",
-                lineNumber: 39,
+                lineNumber: 23,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -80,7 +80,7 @@ function Join() {
                         children: "We invite research labs from around the world to join this collaborative initiative."
                     }, void 0, false, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 45,
+                        lineNumber: 28,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -91,20 +91,20 @@ function Join() {
                                 children: "please contact our organizing team using the information below"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 49,
+                                lineNumber: 32,
                                 columnNumber: 21
                             }, this),
                             ". We will then follow up via email with all the necessary details and guide you through the participation process."
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 48,
+                        lineNumber: 31,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/join/page.tsx",
-                lineNumber: 44,
+                lineNumber: 27,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -118,7 +118,7 @@ function Join() {
                         children: "Contact Information"
                     }, void 0, false, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 55,
+                        lineNumber: 37,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -128,7 +128,7 @@ function Join() {
                                 children: "Email:"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 59,
+                                lineNumber: 41,
                                 columnNumber: 11
                             }, this),
                             ' ',
@@ -138,13 +138,13 @@ function Join() {
                                 children: "asp.fumi.seq.initiative@gmail.com"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 60,
+                                lineNumber: 42,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 58,
+                        lineNumber: 40,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -152,13 +152,13 @@ function Join() {
                         children: "To get involved, please send a short email expressing your lab's interest in participating. We will follow up with more information and next steps, typically within 2-3 business days."
                     }, void 0, false, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 64,
+                        lineNumber: 46,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/join/page.tsx",
-                lineNumber: 54,
+                lineNumber: 36,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -172,7 +172,7 @@ function Join() {
                         children: "Steps for Joining"
                     }, void 0, false, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 71,
+                        lineNumber: 52,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -194,12 +194,12 @@ function Join() {
                                             children: step.number
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/join/page.tsx",
-                                            lineNumber: 78,
+                                            lineNumber: 59,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/join/page.tsx",
-                                        lineNumber: 77,
+                                        lineNumber: 58,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
@@ -207,7 +207,7 @@ function Join() {
                                         children: step.title
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/join/page.tsx",
-                                        lineNumber: 80,
+                                        lineNumber: 61,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -218,24 +218,24 @@ function Join() {
                                         children: step.description
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/join/page.tsx",
-                                        lineNumber: 81,
+                                        lineNumber: 62,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, step.number, true, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 76,
+                                lineNumber: 57,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 74,
+                        lineNumber: 55,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/join/page.tsx",
-                lineNumber: 70,
+                lineNumber: 51,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -260,14 +260,14 @@ function Join() {
                                         className: "w-6 h-6"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/join/page.tsx",
-                                        lineNumber: 93,
+                                        lineNumber: 73,
                                         columnNumber: 13
                                     }, this),
                                     "View Global Map"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 92,
+                                lineNumber: 72,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -278,13 +278,13 @@ function Join() {
                                 children: "See where our collaborating research labs are located."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 96,
+                                lineNumber: 76,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 91,
+                        lineNumber: 71,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -306,14 +306,14 @@ function Join() {
                                         className: "w-6 h-6"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/join/page.tsx",
-                                        lineNumber: 103,
+                                        lineNumber: 82,
                                         columnNumber: 14
                                     }, this),
                                     "Metadata Form"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 102,
+                                lineNumber: 81,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -324,13 +324,13 @@ function Join() {
                                 children: "Access the secure form to submit your laboratory information."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 106,
+                                lineNumber: 85,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 101,
+                        lineNumber: 80,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -352,14 +352,14 @@ function Join() {
                                         className: "w-6 h-6"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/join/page.tsx",
-                                        lineNumber: 113,
+                                        lineNumber: 91,
                                         columnNumber: 14
                                     }, this),
                                     "Isolate Form"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 112,
+                                lineNumber: 90,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -370,19 +370,19 @@ function Join() {
                                 children: "Submit data for each individual strain you are sending."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 116,
+                                lineNumber: 94,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 111,
+                        lineNumber: 89,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/join/page.tsx",
-                lineNumber: 90,
+                lineNumber: 70,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -396,7 +396,7 @@ function Join() {
                         children: "Questions?"
                     }, void 0, false, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 124,
+                        lineNumber: 100,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -413,7 +413,7 @@ function Join() {
                                 children: "FAQ page"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/join/page.tsx",
-                                lineNumber: 129,
+                                lineNumber: 105,
                                 columnNumber: 11
                             }, this),
                             ' ',
@@ -421,19 +421,19 @@ function Join() {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/join/page.tsx",
-                        lineNumber: 127,
+                        lineNumber: 103,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/join/page.tsx",
-                lineNumber: 123,
+                lineNumber: 99,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/join/page.tsx",
-        lineNumber: 38,
+        lineNumber: 22,
         columnNumber: 5
     }, this);
 }

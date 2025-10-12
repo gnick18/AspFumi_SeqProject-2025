@@ -1,36 +1,20 @@
 'use client';
 
-// Note: 'next/link' has been removed to resolve a build error. Standard <a> tags are used instead.
+// Note: Using standard <a> tags for navigation to resolve a persistent build error with 'next/link'.
+// The Link component can be restored if the project's build configuration is adjusted.
 
-// Helper component for SVG icons to keep the main component cleaner
+// Helper component for SVG icons
 const Icon = ({ path, className }: { path: string, className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className || "w-8 h-8"}>
     <path fillRule="evenodd" d={path} clipRule="evenodd" />
   </svg>
 );
 
-// This array correctly defines all four steps.
 const steps = [
-  {
-    number: '1',
-    title: 'Contact the Leadership Team',
-    description: 'Email the leadership team to express your interest in joining.'
-  },
-  {
-    number: '2',
-    title: 'Fill Out Metadata Form',
-    description: 'We will provide you with the password to access the metadata form. Please fill it out completely.'
-  },
-  {
-    number: '3',
-    title: 'Fill out the Isolate Form',
-    description: 'We will provide you with the password to access the isolate form. Please fill the form out for EACH isolate being shipped for sequencing.'
-  },
-  {
-    number: '4',
-    title: 'Ship Your Isolates',
-    description: 'Shipping information will be shared via email after form submission. All samples will be processed at no cost to your lab in Jena, Germany.'
-  }
+  { number: '1', title: 'Contact the Leadership Team', description: 'Email the leadership team to express your interest in joining.' },
+  { number: '2', title: 'Fill Out Metadata Form', description: 'We will provide you with the password to access the metadata form. Please fill it out completely.' },
+  { number: '3', title: 'Fill out the Isolate Form', description: 'We will provide you with the password to access the isolate form. Please fill the form out for EACH isolate being shipped for sequencing.' },
+  { number: '4', title: 'Ship Your Isolates', description: 'Shipping information will be shared via email after form submission. All samples will be processed at no cost to your lab in Jena, Germany.' }
 ];
 
 export default function Join() {
@@ -40,7 +24,6 @@ export default function Join() {
         Join Our Initiative
       </h2>
 
-      {/* Introduction Card */}
       <div className="popup-card p-6 rounded-lg mb-8 space-y-4">
         <p className="text-base leading-relaxed">
           We invite research labs from around the world to join this collaborative initiative.
@@ -50,7 +33,6 @@ export default function Join() {
         </p>
       </div>
 
-      {/* Contact Card */}
       <div className="popup-card p-6 rounded-lg mb-8 space-y-4">
         <h3 className="text-xl font-semibold" style={{ color: 'var(--secondary)' }}>
           Contact Information
@@ -62,11 +44,10 @@ export default function Join() {
           </a>
         </p>
         <p className="text-base leading-relaxed">
-          To get involved, please send a short email expressing your lab's interest in participating. We will follow up with more information and next steps, typically within 2-3 business days.
+          To get involved, please send a short email expressing your lab&apos;s interest in participating. We will follow up with more information and next steps, typically within 2-3 business days.
         </p>
       </div>
 
-      {/* Steps Card */}
       <div className="popup-card p-6 rounded-lg mb-8">
         <h3 className="text-xl font-semibold mb-6 text-center" style={{ color: 'var(--secondary)' }}>
           Steps for Joining
@@ -86,7 +67,6 @@ export default function Join() {
         </div>
       </div>
 
-      {/* Links Card */}
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <a href="/map" className="block p-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1" style={{ backgroundColor: 'var(--light-yellow)', border: '2px solid var(--soft-green)' }}>
           <h4 className="text-lg font-semibold mb-2 flex items-center gap-2" style={{ color: 'var(--dark-green)' }}>
@@ -97,7 +77,6 @@ export default function Join() {
             See where our collaborating research labs are located.
           </p>
         </a>
-
         <a href="/metadata-form" className="block p-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1" style={{ backgroundColor: 'var(--light-yellow)', border: '2px solid var(--soft-green)' }}>
           <h4 className="text-lg font-semibold mb-2 flex items-center gap-2" style={{ color: 'var(--dark-green)' }}>
              <Icon path="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" className="w-6 h-6" />
@@ -107,7 +86,6 @@ export default function Join() {
             Access the secure form to submit your laboratory information.
           </p>
         </a>
-
         <a href="/isolate-form" className="block p-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1" style={{ backgroundColor: 'var(--light-yellow)', border: '2px solid var(--soft-green)' }}>
           <h4 className="text-lg font-semibold mb-2 flex items-center gap-2" style={{ color: 'var(--dark-green)' }}>
              <Icon path="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" className="w-6 h-6" />
@@ -118,8 +96,6 @@ export default function Join() {
           </p>
         </a>
       </div>
-
-      {/* FAQ Link */}
       <div className="popup-card p-6 rounded-lg">
         <h3 className="text-lg font-semibold mb-3" style={{ color: 'var(--secondary)' }}>
           Questions?
@@ -129,10 +105,11 @@ export default function Join() {
           <a href="/faq" className="underline font-semibold" style={{ color: 'var(--dark-grey)' }}>
             FAQ page
           </a>{' '}
-          or don't hesitate to contact us directly.
+          or don&apos;t hesitate to contact us directly.
         </p>
       </div>
     </div>
   );
 }
+
 

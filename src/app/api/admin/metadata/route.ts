@@ -20,8 +20,6 @@ const headers = [
 
 // --- NEW: Function to create the initial data files with admin labs ---
 async function seedInitialData() {
-  // Define your admin labs here.
-  // This data will be used to create the initial files.
   const adminLabs = [
     {
       timestamp: new Date('2025-10-01T10:00:00.000Z').toISOString(),
@@ -85,14 +83,12 @@ async function seedInitialData() {
     }
   ];
 
-  // 1. Create and write the TSV file
   const tsvString = stringify(adminLabs, { header: true, columns: headers, delimiter: '\t' });
   await fs.mkdir(dataDir, { recursive: true });
   await fs.writeFile(tsvFilePath, tsvString);
 
-  // 2. Create and write the JSON file for the map
   const jsonData = adminLabs.map((lab, index) => ({
-      id: lab.timestamp || `seeded-${index}`, // Use timestamp as a unique ID
+      id: lab.timestamp || `seeded-${index}`,
       name: lab.lab_name,
       institution: lab.institution,
       location: `${lab.city}${lab.state ? ', ' + lab.state : ''}, ${lab.country}`,
@@ -102,19 +98,19 @@ async function seedInitialData() {
       matchLevel: lab.match_level
   }));
   await fs.writeFile(jsonFilePath, JSON.stringify(jsonData, null, 2));
-  console.log('Successfully seeded initial lab data.');
 }
 
 
 async function readTsv(): Promise<LabMetadata[]> {
   try {
     const fileContent = await fs.readFile(tsvFilePath, 'utf-8');
-    const records = parse(fileContent, {
+    // FIX 1: Replaced 'any' with a more specific type
+    const records: Record<string, string>[] = parse(fileContent, {
       delimiter: '\t',
       columns: true,
       skip_empty_lines: true,
     });
-    return records.map((rec: any) => ({ id: rec.timestamp, ...rec }));
+    return records.map((rec) => ({ id: rec.timestamp, ...rec }));
   } catch {
     return [];
   }
@@ -122,7 +118,8 @@ async function readTsv(): Promise<LabMetadata[]> {
 
 async function writeData(data: LabMetadata[]) {
     if (data.length > 0) {
-        const dataToWrite = data.map(({ id, ...rest }) => rest);
+        // FIX 2: Added underscore to 'id' to signal it's intentionally unused.
+        const dataToWrite = data.map(({ id: _id, ...rest }) => rest);
         const tsvString = stringify(dataToWrite, { header: true, delimiter: '\t', columns: headers });
         await fs.writeFile(tsvFilePath, tsvString);
     } else {
@@ -146,22 +143,19 @@ async function writeData(data: LabMetadata[]) {
 
 export async function GET() {
   try {
-    // Check if the file exists. If it throws an error, the file is not there.
     await fs.access(tsvFilePath);
   } catch {
-    // File doesn't exist, so let's create it with the default admin labs.
-    console.log('Data file not found. Seeding initial admin labs...');
     await seedInitialData();
   }
   
-  // Now, read the file (which is guaranteed to exist) and return its content.
   const submissions = await readTsv();
   return NextResponse.json({ submissions });
 }
 
 export async function PUT(request: NextRequest) {
   const updatedRow: LabMetadata = await request.json();
-  let submissions = await readTsv();
+  // FIX 3: Changed 'let' to 'const'
+  const submissions = await readTsv();
   const index = submissions.findIndex(s => s.id === updatedRow.id);
 
   if (index === -1) {
@@ -176,7 +170,8 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const { id } = await request.json();
-  let submissions = await readTsv();
+  // FIX 4: Changed 'let' to 'const'
+  const submissions = await readTsv();
   const filteredSubmissions = submissions.filter(s => s.id !== id);
   
   if (submissions.length === filteredSubmissions.length) {
@@ -187,4 +182,3 @@ export async function DELETE(request: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
-
