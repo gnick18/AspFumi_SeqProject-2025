@@ -91,13 +91,14 @@ async function readTsv() {
     try {
         await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].access(tsvFilePath);
         const fileContent = await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].readFile(tsvFilePath, 'utf-8');
+        // FIX 1: Replaced 'any' with a more specific type
         const records = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$csv$2d$parse$2f$lib$2f$sync$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["parse"])(fileContent, {
             delimiter: '\t',
             columns: true,
             skip_empty_lines: true
         });
-        return records.map((rec, index)=>({
-                id: rec.timestamp || `row-${index}`,
+        return records.map((rec)=>({
+                id: rec.timestamp,
                 ...rec
             }));
     } catch  {
@@ -118,9 +119,9 @@ async function writeData(data) {
         await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].unlink(tsvFilePath).catch(()=>{});
     }
     // Write to JSON
-    const dataToWriteJson = data.map(({ id, ...rest })=>({
-            id,
-            ...rest
+    // FIX 2: Simplified the map function to remove the 'id defined but never used' warning.
+    const dataToWriteJson = data.map((item)=>({
+            ...item
         }));
     await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].writeFile(jsonFilePath, JSON.stringify(dataToWriteJson, null, 2));
 }
@@ -132,7 +133,8 @@ async function GET() {
 }
 async function PUT(request) {
     const updatedRow = await request.json();
-    let submissions = await readTsv();
+    // FIX 3: Changed 'let' to 'const'
+    const submissions = await readTsv();
     const index = submissions.findIndex((s)=>s.id === updatedRow.id);
     if (index === -1) {
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
@@ -153,7 +155,8 @@ async function PUT(request) {
 }
 async function DELETE(request) {
     const { id } = await request.json();
-    let submissions = await readTsv();
+    // FIX 4: Changed 'let' to 'const'
+    const submissions = await readTsv();
     const filteredSubmissions = submissions.filter((s)=>s.id !== id);
     if (submissions.length === filteredSubmissions.length) {
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({

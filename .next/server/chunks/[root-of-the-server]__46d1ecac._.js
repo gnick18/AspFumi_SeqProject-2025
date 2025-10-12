@@ -103,8 +103,6 @@ const headers = [
 ];
 // --- NEW: Function to create the initial data files with admin labs ---
 async function seedInitialData() {
-    // Define your admin labs here.
-    // This data will be used to create the initial files.
     const adminLabs = [
         {
             timestamp: new Date('2025-10-01T10:00:00.000Z').toISOString(),
@@ -167,7 +165,6 @@ async function seedInitialData() {
             match_level: 'city'
         }
     ];
-    // 1. Create and write the TSV file
     const tsvString = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$csv$2d$stringify$2f$lib$2f$sync$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["stringify"])(adminLabs, {
         header: true,
         columns: headers,
@@ -177,7 +174,6 @@ async function seedInitialData() {
         recursive: true
     });
     await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].writeFile(tsvFilePath, tsvString);
-    // 2. Create and write the JSON file for the map
     const jsonData = adminLabs.map((lab, index)=>({
             id: lab.timestamp || `seeded-${index}`,
             name: lab.lab_name,
@@ -189,11 +185,11 @@ async function seedInitialData() {
             matchLevel: lab.match_level
         }));
     await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].writeFile(jsonFilePath, JSON.stringify(jsonData, null, 2));
-    console.log('Successfully seeded initial lab data.');
 }
 async function readTsv() {
     try {
         const fileContent = await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].readFile(tsvFilePath, 'utf-8');
+        // FIX 1: Replaced 'any' with a more specific type
         const records = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$csv$2d$parse$2f$lib$2f$sync$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["parse"])(fileContent, {
             delimiter: '\t',
             columns: true,
@@ -209,7 +205,8 @@ async function readTsv() {
 }
 async function writeData(data) {
     if (data.length > 0) {
-        const dataToWrite = data.map(({ id, ...rest })=>rest);
+        // FIX 2: Added underscore to 'id' to signal it's intentionally unused.
+        const dataToWrite = data.map(({ id: _id, ...rest })=>rest);
         const tsvString = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$csv$2d$stringify$2f$lib$2f$sync$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["stringify"])(dataToWrite, {
             header: true,
             delimiter: '\t',
@@ -233,14 +230,10 @@ async function writeData(data) {
 }
 async function GET() {
     try {
-        // Check if the file exists. If it throws an error, the file is not there.
         await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].access(tsvFilePath);
     } catch  {
-        // File doesn't exist, so let's create it with the default admin labs.
-        console.log('Data file not found. Seeding initial admin labs...');
         await seedInitialData();
     }
-    // Now, read the file (which is guaranteed to exist) and return its content.
     const submissions = await readTsv();
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
         submissions
@@ -248,7 +241,8 @@ async function GET() {
 }
 async function PUT(request) {
     const updatedRow = await request.json();
-    let submissions = await readTsv();
+    // FIX 3: Changed 'let' to 'const'
+    const submissions = await readTsv();
     const index = submissions.findIndex((s)=>s.id === updatedRow.id);
     if (index === -1) {
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
@@ -269,7 +263,8 @@ async function PUT(request) {
 }
 async function DELETE(request) {
     const { id } = await request.json();
-    let submissions = await readTsv();
+    // FIX 4: Changed 'let' to 'const'
+    const submissions = await readTsv();
     const filteredSubmissions = submissions.filter((s)=>s.id !== id);
     if (submissions.length === filteredSubmissions.length) {
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({

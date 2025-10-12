@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState, useMemo, useRef } from 'react';
+// You may need to run `npm install --save-dev @types/leaflet` in your terminal if you haven't already.
+import type L from 'leaflet';
 
 // --- TYPE DEFINITIONS ---
 interface Lab {
@@ -17,10 +19,10 @@ interface GroupedLabs {
   [key: string]: Lab[];
 }
 
-// Augment the Window interface to help TypeScript understand that window.L will exist after we load it.
+// Augment the Window interface to tell TypeScript what 'window.L' will look like.
 declare global {
   interface Window {
-    L: any; 
+    L: typeof L;
   }
 }
 
@@ -29,12 +31,10 @@ const GlobalMap = () => {
   const [loading, setLoading] = useState(true);
   const [leafletLoaded, setLeafletLoaded] = useState(false);
 
-  // Use two refs: one for the map container div, and one for the Leaflet map instance
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
 
   // --- EFFECT 1: Load Leaflet Library from CDN ---
-  // This runs only once to inject the Leaflet script and stylesheet into the page.
   useEffect(() => {
     if (window.L) {
       setLeafletLoaded(true);
@@ -52,8 +52,12 @@ const GlobalMap = () => {
     document.body.appendChild(script);
 
     return () => { // Cleanup function
-      document.head.removeChild(cssLink);
-      document.body.removeChild(script);
+      if (document.head.contains(cssLink)) {
+        document.head.removeChild(cssLink);
+      }
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
     };
   }, []);
 
@@ -87,12 +91,10 @@ const GlobalMap = () => {
   
   // --- EFFECT 3: Initialize and Update the Map ---
   useEffect(() => {
-    // Wait until Leaflet is loaded, we're not loading data, and the container div exists.
     if (!leafletLoaded || !mapContainerRef.current || loading) return;
 
     const L = window.L;
 
-    // Initialize map only once
     if (!mapInstanceRef.current) {
       mapInstanceRef.current = L.map(mapContainerRef.current).setView([40, 0], 2);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -100,10 +102,9 @@ const GlobalMap = () => {
       }).addTo(mapInstanceRef.current);
     }
     
-    // Clear existing markers before adding new ones
-    mapInstanceRef.current.eachLayer((layer: any) => {
+    mapInstanceRef.current.eachLayer((layer: L.Layer) => {
       if (layer instanceof L.Marker) {
-        mapInstanceRef.current.removeLayer(layer);
+        mapInstanceRef.current?.removeLayer(layer);
       }
     });
 
@@ -113,7 +114,6 @@ const GlobalMap = () => {
       iconSize: [22, 22], iconAnchor: [11, 11], popupAnchor: [0, -11]
     });
 
-    // Add new markers from the fetched and grouped data
     Object.values(groupedLabs).forEach((labGroup) => {
       const firstLab = labGroup[0];
       const position: [number, number] = [firstLab.lat, firstLab.lng];
@@ -131,7 +131,6 @@ const GlobalMap = () => {
     );
   }
 
-  // Render the div that the map will attach to.
   return (
     <div className="h-96 w-full rounded-lg overflow-hidden shadow-lg">
       <div ref={mapContainerRef} style={{ height: '100%', width: '100%' }} />

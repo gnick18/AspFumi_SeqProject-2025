@@ -17,11 +17,9 @@ const GlobalMap = ()=>{
     const [labs, setLabs] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [leafletLoaded, setLeafletLoaded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    // Use two refs: one for the map container div, and one for the Leaflet map instance
     const mapContainerRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     const mapInstanceRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     // --- EFFECT 1: Load Leaflet Library from CDN ---
-    // This runs only once to inject the Leaflet script and stylesheet into the page.
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "GlobalMap.useEffect": ()=>{
             if (window.L) {
@@ -41,8 +39,12 @@ const GlobalMap = ()=>{
             document.body.appendChild(script);
             return ({
                 "GlobalMap.useEffect": ()=>{
-                    document.head.removeChild(cssLink);
-                    document.body.removeChild(script);
+                    if (document.head.contains(cssLink)) {
+                        document.head.removeChild(cssLink);
+                    }
+                    if (document.body.contains(script)) {
+                        document.body.removeChild(script);
+                    }
                 }
             })["GlobalMap.useEffect"];
         }
@@ -86,10 +88,8 @@ const GlobalMap = ()=>{
     // --- EFFECT 3: Initialize and Update the Map ---
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "GlobalMap.useEffect": ()=>{
-            // Wait until Leaflet is loaded, we're not loading data, and the container div exists.
             if (!leafletLoaded || !mapContainerRef.current || loading) return;
             const L = window.L;
-            // Initialize map only once
             if (!mapInstanceRef.current) {
                 mapInstanceRef.current = L.map(mapContainerRef.current).setView([
                     40,
@@ -99,11 +99,11 @@ const GlobalMap = ()=>{
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(mapInstanceRef.current);
             }
-            // Clear existing markers before adding new ones
             mapInstanceRef.current.eachLayer({
                 "GlobalMap.useEffect": (layer)=>{
                     if (layer instanceof L.Marker) {
-                        mapInstanceRef.current.removeLayer(layer);
+                        var _mapInstanceRef_current;
+                        (_mapInstanceRef_current = mapInstanceRef.current) === null || _mapInstanceRef_current === void 0 ? void 0 : _mapInstanceRef_current.removeLayer(layer);
                     }
                 }
             }["GlobalMap.useEffect"]);
@@ -123,7 +123,6 @@ const GlobalMap = ()=>{
                     -11
                 ]
             });
-            // Add new markers from the fetched and grouped data
             Object.values(groupedLabs).forEach({
                 "GlobalMap.useEffect": (labGroup)=>{
                     const firstLab = labGroup[0];
@@ -162,7 +161,6 @@ const GlobalMap = ()=>{
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0));
     }
-    // Render the div that the map will attach to.
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "h-96 w-full rounded-lg overflow-hidden shadow-lg",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -173,12 +171,12 @@ const GlobalMap = ()=>{
             }
         }, void 0, false, {
             fileName: "[project]/src/components/GlobalMap.tsx",
-            lineNumber: 137,
+            lineNumber: 136,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/src/components/GlobalMap.tsx",
-        lineNumber: 136,
+        lineNumber: 135,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
