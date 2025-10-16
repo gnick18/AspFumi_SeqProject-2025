@@ -14,14 +14,14 @@ export interface ContactLogEntry {
 }
 
 // Helper to convert database results (snake_case) to our frontend format (camelCase)
-const dbToFrontend = (dbRow: Record<string, any>): ContactLogEntry => ({
-  id: dbRow.id,
-  labName: dbRow.lab_name,
-  institution: dbRow.institution,
-  email: dbRow.email,
-  status: dbRow.status,
-  contactedBy: dbRow.contacted_by,
-  comments: dbRow.comments,
+const dbToFrontend = (dbRow: Record<string, unknown>): ContactLogEntry => ({
+  id: dbRow.id as number,
+  labName: dbRow.lab_name as string,
+  institution: dbRow.institution as string,
+  email: dbRow.email as string,
+  status: dbRow.status as string,
+  contactedBy: dbRow.contacted_by as string,
+  comments: dbRow.comments as string,
 });
 
 // --- API Methods ---

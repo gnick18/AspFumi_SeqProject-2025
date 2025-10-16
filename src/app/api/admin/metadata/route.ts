@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 // IMPORT THE DATABASE DRIVER
-import { neon } from '@neondatabase/serverless';
+import { neon, NeonQueryFunction } from '@neondatabase/serverless';
 
 // The interface for a row in our table. Note: 'id' is now a number.
 interface LabMetadata {
   id: number;
-  [key: string]: any; 
+  [key: string]: unknown; 
 }
 
 // --- NEW: Database-powered seeding function ---
 // This function will only run if the database table is empty.
-async function seedInitialData(sql: any) {
+async function seedInitialData(sql: NeonQueryFunction<false, false>) {
   const adminLabs = [
     { lab_name: 'Keller Lab', institution: 'University of Wisconsin-Madison', city: 'Madison', state: 'WI', country: 'United States', contact_name: 'Nancy Keller', contact_email: 'npkeller@wisc.com', research_use: 'Medical microbiology', comments: 'This is a pre-seeded admin lab entry.', latitude: 43.0731, longitude: -89.4012, match_level: 'city' },
     { lab_name: 'Rokas Lab', institution: 'Vanderbilt University', city: 'Nashville', state: 'TN', country: 'United States', contact_name: 'Antonis Rokas', contact_email: 'admin@example.com', research_use: 'Fungal evolution and pathogenesis.', comments: 'This is a pre-seeded admin lab entry.', latitude: 36.1627, longitude: -86.7816, match_level: 'city' },

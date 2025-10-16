@@ -5,7 +5,7 @@ import { neon } from '@neondatabase/serverless';
 // The interface for a row in our table. Note: 'id' is now a number.
 interface IsolateData {
   id: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 // --- API Methods ---
 
