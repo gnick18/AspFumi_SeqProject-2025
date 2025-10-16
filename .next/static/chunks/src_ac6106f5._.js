@@ -229,7 +229,7 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
-"[project]/src/app/admin/page.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
+"[project]/src/app/isolate-form/page.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
@@ -488,11 +488,6 @@ function AdminPage() {
         {
             key: 'contactedBy',
             header: 'Contacted By'
-        },
-        {
-            key: 'comments',
-            header: "Comments",
-            type: 'textarea'
         }
     ];
     // --- RENDER LOGIC ---
@@ -506,8 +501,8 @@ function AdminPage() {
                         className: "text-2xl font-bold text-center text-gray-800",
                         children: "Admin Access"
                     }, void 0, false, {
-                        fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 175,
+                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                        lineNumber: 173,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -521,8 +516,8 @@ function AdminPage() {
                                         className: "text-sm font-bold text-gray-600 block",
                                         children: "Password"
                                     }, void 0, false, {
-                                        fileName: "[project]/src/app/admin/page.tsx",
-                                        lineNumber: 178,
+                                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                                        lineNumber: 176,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -533,22 +528,22 @@ function AdminPage() {
                                         className: "w-full p-2 mt-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500",
                                         required: true
                                     }, void 0, false, {
-                                        fileName: "[project]/src/app/admin/page.tsx",
-                                        lineNumber: 179,
+                                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                                        lineNumber: 177,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 177,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 175,
                                 columnNumber: 13
                             }, this),
                             passwordError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-sm text-red-600 text-center",
                                 children: passwordError
                             }, void 0, false, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 189,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 187,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -557,46 +552,46 @@ function AdminPage() {
                                     className: "w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md",
                                     children: "Enter"
                                 }, void 0, false, {
-                                    fileName: "[project]/src/app/admin/page.tsx",
-                                    lineNumber: 192,
+                                    fileName: "[project]/src/app/isolate-form/page.tsx",
+                                    lineNumber: 190,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 191,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 189,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 176,
+                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                        lineNumber: 174,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 174,
+                fileName: "[project]/src/app/isolate-form/page.tsx",
+                lineNumber: 172,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
-            fileName: "[project]/src/app/admin/page.tsx",
-            lineNumber: 173,
+            fileName: "[project]/src/app/isolate-form/page.tsx",
+            lineNumber: 171,
             columnNumber: 7
         }, this);
     }
     if (loading) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         children: "Loading Admin Dashboard..."
     }, void 0, false, {
-        fileName: "[project]/src/app/admin/page.tsx",
-        lineNumber: 202,
+        fileName: "[project]/src/app/isolate-form/page.tsx",
+        lineNumber: 200,
         columnNumber: 23
     }, this);
     if (error) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "text-red-500",
         children: error
     }, void 0, false, {
-        fileName: "[project]/src/app/admin/page.tsx",
-        lineNumber: 203,
+        fileName: "[project]/src/app/isolate-form/page.tsx",
+        lineNumber: 201,
         columnNumber: 21
     }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -606,8 +601,8 @@ function AdminPage() {
                 className: "text-2xl md:text-3xl font-bold mb-6",
                 children: "Admin Dashboard"
             }, void 0, false, {
-                fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 207,
+                fileName: "[project]/src/app/isolate-form/page.tsx",
+                lineNumber: 205,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -620,8 +615,8 @@ function AdminPage() {
                                 className: "text-xl font-semibold",
                                 children: "Lab Outreach Tracker"
                             }, void 0, false, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 210,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 208,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -629,14 +624,14 @@ function AdminPage() {
                                 className: "px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium",
                                 children: "+ Add New Row"
                             }, void 0, false, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 211,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 209,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 209,
+                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                        lineNumber: 207,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$EditableTable$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -645,14 +640,14 @@ function AdminPage() {
                         onSave: handleSaveContact,
                         onDelete: handleDeleteContact
                     }, void 0, false, {
-                        fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 215,
+                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                        lineNumber: 213,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 208,
+                fileName: "[project]/src/app/isolate-form/page.tsx",
+                lineNumber: 206,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -665,22 +660,22 @@ function AdminPage() {
                                 className: "text-3xl font-bold text-blue-800",
                                 children: labSubmissions.length
                             }, void 0, false, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 218,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 216,
                                 columnNumber: 60
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-sm text-blue-600",
                                 children: "Total Labs Submitted"
                             }, void 0, false, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 218,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 216,
                                 columnNumber: 135
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 218,
+                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                        lineNumber: 216,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -690,22 +685,22 @@ function AdminPage() {
                                 className: "text-3xl font-bold text-green-800",
                                 children: isolateSubmissions.length
                             }, void 0, false, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 219,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 217,
                                 columnNumber: 61
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-sm text-green-600",
                                 children: "Total Isolates Submitted"
                             }, void 0, false, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 219,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 217,
                                 columnNumber: 141
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 219,
+                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                        lineNumber: 217,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -715,28 +710,28 @@ function AdminPage() {
                                 className: "text-3xl font-bold text-purple-800",
                                 children: labSubmissions.length > 0 ? (isolateSubmissions.length / labSubmissions.length).toFixed(1) : 0
                             }, void 0, false, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 220,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 218,
                                 columnNumber: 62
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-sm text-purple-600",
                                 children: "Avg. Isolates per Lab"
                             }, void 0, false, {
-                                fileName: "[project]/src/app/admin/page.tsx",
-                                lineNumber: 220,
+                                fileName: "[project]/src/app/isolate-form/page.tsx",
+                                lineNumber: 218,
                                 columnNumber: 212
                             }, this)
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 220,
+                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                        lineNumber: 218,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 217,
+                fileName: "[project]/src/app/isolate-form/page.tsx",
+                lineNumber: 215,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -751,8 +746,8 @@ function AdminPage() {
                             ")"
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 223,
+                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                        lineNumber: 221,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -764,14 +759,14 @@ function AdminPage() {
                             ")"
                         ]
                     }, void 0, true, {
-                        fileName: "[project]/src/app/admin/page.tsx",
-                        lineNumber: 224,
+                        fileName: "[project]/src/app/isolate-form/page.tsx",
+                        lineNumber: 222,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
-                fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 222,
+                fileName: "[project]/src/app/isolate-form/page.tsx",
+                lineNumber: 220,
                 columnNumber: 7
             }, this),
             activeTab === 'metadata' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$EditableTable$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -780,8 +775,8 @@ function AdminPage() {
                 onSave: (row)=>handleSave(row, 'metadata'),
                 onDelete: (id)=>handleDelete(id, 'metadata')
             }, void 0, false, {
-                fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 227,
+                fileName: "[project]/src/app/isolate-form/page.tsx",
+                lineNumber: 225,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$EditableTable$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 columns: isolateColumns,
@@ -789,14 +784,14 @@ function AdminPage() {
                 onSave: (row)=>handleSave(row, 'isolates'),
                 onDelete: (id)=>handleDelete(id, 'isolates')
             }, void 0, false, {
-                fileName: "[project]/src/app/admin/page.tsx",
-                lineNumber: 229,
+                fileName: "[project]/src/app/isolate-form/page.tsx",
+                lineNumber: 227,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
-        fileName: "[project]/src/app/admin/page.tsx",
-        lineNumber: 206,
+        fileName: "[project]/src/app/isolate-form/page.tsx",
+        lineNumber: 204,
         columnNumber: 5
     }, this);
 }
@@ -810,4 +805,4 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 }),
 ]);
 
-//# sourceMappingURL=src_7ed4da21._.js.map
+//# sourceMappingURL=src_ac6106f5._.js.map

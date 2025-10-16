@@ -6,10 +6,12 @@ import { useState } from 'react';
 export interface Column {
   key: string;
   header: string;
-  type?: 'text' | 'textarea'; 
+  type?: 'text' | 'textarea';
+  // FIX 1: Added an optional 'selectOptions' property.
+  // If this exists, the cell will render as a dropdown.
+  selectOptions?: readonly string[]; 
 }
 
-// Use a generic type 'T' that must be an object with an 'id' property
 interface EditableTableProps<T extends { id: string }> {
   columns: Column[];
   data: T[];
@@ -38,9 +40,20 @@ const EditableRow = <T extends { id: string }>({ row, columns, onSave, onDelete 
   return (
     <tr className="border-b hover:bg-gray-50">
       {columns.map(col => (
-        <td key={col.key} className="p-2 text-sm">
+        <td key={col.key} className="p-2 text-sm align-top">
           {isEditing ? (
-            col.type === 'textarea' ? (
+            // FIX 2: Added new logic to render a <select> dropdown if 'selectOptions' are provided.
+            col.selectOptions ? (
+              <select
+                value={rowData[col.key as keyof T] as string}
+                onChange={(e) => handleChange(col.key, e.target.value)}
+                className="w-full p-1 border rounded text-xs"
+              >
+                {col.selectOptions.map(option => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            ) : col.type === 'textarea' ? (
               <textarea
                 value={rowData[col.key as keyof T] as string}
                 onChange={(e) => handleChange(col.key, e.target.value)}
@@ -60,7 +73,7 @@ const EditableRow = <T extends { id: string }>({ row, columns, onSave, onDelete 
           )}
         </td>
       ))}
-      <td className="p-2 text-right">
+      <td className="p-2 text-right align-top">
         {isEditing ? (
           <>
             <button onClick={handleSave} disabled={isSaving} className="text-sm text-green-600 hover:text-green-800 font-semibold disabled:opacity-50">
@@ -87,7 +100,7 @@ const EditableRow = <T extends { id: string }>({ row, columns, onSave, onDelete 
 
 const EditableTable = <T extends { id: string }>({ columns, data, onSave, onDelete }: EditableTableProps<T>) => {
   if (!data || data.length === 0) {
-    return <p className="text-gray-500">No data available.</p>;
+    return <p className="text-gray-500">No data available for this category.</p>;
   }
 
   return (
