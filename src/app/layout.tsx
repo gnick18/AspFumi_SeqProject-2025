@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 import Navigation from "@/components/Navigation";
+import GoogleAnalytics from "@/components/Analytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,8 @@ export default function RootLayout({
         <main className="container mx-auto px-4 py-8">
           {children}
         </main>
+        {/* ADDING THE ANALYTICS COMPONENT HERE */}
+        <GoogleAnalytics />
       </body>
     </html>
   );
