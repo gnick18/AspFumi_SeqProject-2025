@@ -71,9 +71,14 @@ export default function AdminPage() {
         setIsolateSubmissions(isolateData.submissions || []);
         setContactLog(contactData.contacts || []);
 
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error(err);
-        setError(err.message || 'Failed to load submission data.');
+        // Add a check to safely handle the error
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred while loading data.');
+        }
       } finally {
         setLoading(false);
       }
