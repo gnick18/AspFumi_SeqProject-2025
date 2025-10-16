@@ -1,5 +1,0 @@
-timestamp	lab_name	institution	city	state	country	contact_name	contact_email	research_use	comments	latitude	longitude	match_level
-2025-10-01T10:00:00.000Z	Keller Lab	University of Wisconsin-Madison	Madison	WI	United States	Nancy Keller	npkeller@wisc.com	Medical microbiology	This is a pre-seeded admin lab entry.	43.0731	-89.4012	city
-2025-10-01T10:01:00.000Z	Rokas Lab	Vanderbilt University	Nashville	TN	United States	Antonis Rokas	admin@example.com	Fungal evolution and pathogenesis.	This is a pre-seeded admin lab entry.	36.1627	-86.7816	city
-2025-10-01T10:02:00.000Z	Barber Lab	Friedrich Schiller University Jena	Jena		Germany	Amelia Barber	amelia.barber@uni-jena.de	Fungal genetics and pathogenesis.	This is a pre-seeded admin lab entry.	50.9271	11.5892	city
-2025-10-01T10:03:00.000Z	Gluck-Thaler Lab	University of Wisconsin-Madison	Madison	WI	United States	Emile Gluck-Thaler	gluckthaler@wisc.edu	Plant pathology fungal genomics	This is a pre-seeded admin lab entry.	43.0731	-89.4012	city

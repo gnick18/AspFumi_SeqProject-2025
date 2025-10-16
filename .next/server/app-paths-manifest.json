@@ -4,6 +4,7 @@
   "/api/admin/isolates/route": "app/api/admin/isolates/route.js",
   "/api/admin/metadata/route": "app/api/admin/metadata/route.js",
   "/api/labs/route": "app/api/labs/route.js",
+  "/api/submit-metadata/route": "app/api/submit-metadata/route.js",
   "/faq/page": "app/faq/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/isolate-form/page": "app/isolate-form/page.js",

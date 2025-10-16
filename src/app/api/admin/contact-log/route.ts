@@ -1,89 +1,95 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+// IMPORT THE DATABASE DRIVER
+import { neon } from '@neondatabase/serverless';
 
-// Define the shape of a single contact log entry
-export type ContactStatus = "Not contacted" | "Contacted (x1)" | "Contacted (x2)" | "Responded (yes)" | "Responded (no)";
+// This interface matches the frontend component (camelCase)
 export interface ContactLogEntry {
-  id: string;
+  id: number;
   labName: string;
   institution: string;
   email: string;
-  status: ContactStatus;
+  status: string;
   contactedBy: string;
   comments: string;
 }
 
-const dataDir = path.join(process.cwd(), 'data');
-const jsonFilePath = path.join(dataDir, 'contact_log.json');
-
-// --- Helper Functions to Read/Write Data ---
-async function readContacts(): Promise<ContactLogEntry[]> {
-  try {
-    await fs.access(jsonFilePath);
-    const fileContent = await fs.readFile(jsonFilePath, 'utf-8');
-    return JSON.parse(fileContent);
-  } catch {
-    // If the file doesn't exist, return an empty array. It will be created on the first POST/PUT.
-    return [];
-  }
-}
-
-async function writeContacts(data: ContactLogEntry[]) {
-  await fs.mkdir(dataDir, { recursive: true });
-  await fs.writeFile(jsonFilePath, JSON.stringify(data, null, 2));
-}
+// Helper to convert database results (snake_case) to our frontend format (camelCase)
+const dbToFrontend = (dbRow: Record<string, any>): ContactLogEntry => ({
+  id: dbRow.id,
+  labName: dbRow.lab_name,
+  institution: dbRow.institution,
+  email: dbRow.email,
+  status: dbRow.status,
+  contactedBy: dbRow.contacted_by,
+  comments: dbRow.comments,
+});
 
 // --- API Methods ---
 
 // GET: Fetches all contact log entries
 export async function GET() {
-  const contacts = await readContacts();
-  return NextResponse.json({ contacts });
+  try {
+    const sql = neon(process.env.POSTGRES_URL!);
+    const dbResult = await sql`SELECT * FROM contact_log ORDER BY id`;
+    const contacts = dbResult.map(dbToFrontend); // Convert to camelCase
+    return NextResponse.json({ contacts });
+  } catch (error) {
+    console.error("Database GET Error (contact-log):", error);
+    return NextResponse.json({ error: "Failed to fetch contact log." }, { status: 500 });
+  }
 }
 
 // POST: Creates a new, blank contact log entry
 export async function POST() {
-  const contacts = await readContacts();
-  const newEntry: ContactLogEntry = {
-    id: `contact_${Date.now()}`,
-    labName: '',
-    institution: '',
-    email: '',
-    status: 'Not contacted',
-    contactedBy: '',
-	comments: '',
-  };
-  contacts.push(newEntry);
-  await writeContacts(contacts);
-  return NextResponse.json({ success: true, newEntry });
+  try {
+    const sql = neon(process.env.POSTGRES_URL!);
+    const newDbEntry = await sql`
+      INSERT INTO contact_log (lab_name, institution, email, status, contacted_by, comments) 
+      VALUES ('', '', '', 'Not contacted', '', '') 
+      RETURNING *;
+    `;
+    const newEntry = dbToFrontend(newDbEntry[0]); // Convert to camelCase
+    return NextResponse.json({ success: true, newEntry });
+  } catch (error) {
+    console.error("Database POST Error (contact-log):", error);
+    return NextResponse.json({ error: "Failed to create contact log entry." }, { status: 500 });
+  }
 }
 
 // PUT: Updates an existing contact log entry
 export async function PUT(request: NextRequest) {
-  const updatedEntry: ContactLogEntry = await request.json();
-  const contacts = await readContacts();
-  const index = contacts.findIndex(c => c.id === updatedEntry.id);
+  try {
+    const updatedEntry: ContactLogEntry = await request.json();
+    const sql = neon(process.env.POSTGRES_URL!);
 
-  if (index === -1) {
-    return NextResponse.json({ error: 'Contact entry not found' }, { status: 404 });
+    await sql`
+      UPDATE contact_log
+      SET
+        lab_name = ${updatedEntry.labName},
+        institution = ${updatedEntry.institution},
+        email = ${updatedEntry.email},
+        status = ${updatedEntry.status},
+        contacted_by = ${updatedEntry.contactedBy},
+        comments = ${updatedEntry.comments}
+      WHERE id = ${updatedEntry.id};
+    `;
+    return NextResponse.json({ success: true, updatedEntry });
+  } catch (error) {
+    console.error("Database PUT Error (contact-log):", error);
+    return NextResponse.json({ error: "Failed to update contact log entry." }, { status: 500 });
   }
-  
-  contacts[index] = updatedEntry;
-  await writeContacts(contacts);
-  return NextResponse.json({ success: true, updatedEntry });
 }
 
 // DELETE: Removes a contact log entry
 export async function DELETE(request: NextRequest) {
-  const { id } = await request.json();
-  const contacts = await readContacts();
-  const filteredContacts = contacts.filter(c => c.id !== id);
-  
-  if (contacts.length === filteredContacts.length) {
-      return NextResponse.json({ error: 'Contact entry not found' }, { status: 404 });
+  try {
+    const { id } = await request.json();
+    const sql = neon(process.env.POSTGRES_URL!);
+    await sql`DELETE FROM contact_log WHERE id = ${id}`;
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Database DELETE Error (contact-log):", error);
+    return NextResponse.json({ error: "Failed to delete contact log entry." }, { status: 500 });
   }
-
-  await writeContacts(filteredContacts);
-  return NextResponse.json({ success: true });
 }
+
