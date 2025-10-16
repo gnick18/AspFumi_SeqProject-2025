@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 // IMPORT THE DATABASE DRIVER
 import { neon, NeonQueryFunction } from '@neondatabase/serverless';
+import { getCoordinates } from '@/lib/geocoding';
 
 // The interface for a row in our table. Note: 'id' is now a number.
 interface LabMetadata {
@@ -60,29 +61,52 @@ export async function GET() {
 }
 
 // PUT: Updates an existing lab submission in the database
+// --- THIS IS THE FUNCTION WE ARE FIXING ---
 export async function PUT(request: NextRequest) {
   try {
     const updatedRow: LabMetadata = await request.json();
     const sql = neon(process.env.POSTGRES_URL!);
     
+    // 2. RE-GEOCODE THE LOCATION
+    // Before we update, we call our shared function to get fresh coordinates for the new address.
+    const coordinates = await getCoordinates(
+        updatedRow.city as string, 
+        updatedRow.state as string, 
+        updatedRow.country as string
+    );
+
+    // 3. UPDATE THE DATABASE WITH THE NEW COORDINATES
+    // The SQL query now uses the newly fetched coordinates, not the old ones from the form.
     await sql`
       UPDATE lab_submissions
       SET 
-        lab_name = ${updatedRow.lab_name}, institution = ${updatedRow.institution}, city = ${updatedRow.city},
-        state = ${updatedRow.state}, country = ${updatedRow.country}, contact_name = ${updatedRow.contact_name},
-        contact_email = ${updatedRow.contact_email}, research_use = ${updatedRow.research_use},
-        comments = ${updatedRow.comments}, latitude = ${updatedRow.latitude}, longitude = ${updatedRow.longitude},
-        match_level = ${updatedRow.match_level}
+        lab_name = ${updatedRow.lab_name as string}, institution = ${updatedRow.institution as string}, city = ${updatedRow.city as string},
+        state = ${updatedRow.state as string}, country = ${updatedRow.country as string}, contact_name = ${updatedRow.contact_name as string},
+        contact_email = ${updatedRow.contact_email as string}, research_use = ${updatedRow.research_use as string},
+        comments = ${updatedRow.comments as string}, 
+        latitude = ${coordinates?.lat || null},      -- Use the new latitude
+        longitude = ${coordinates?.lng || null},     -- Use the new longitude
+        match_level = ${coordinates?.matchLevel || 'none'} -- Use the new match level
       WHERE id = ${updatedRow.id};
     `;
-    return NextResponse.json({ success: true, updatedRow });
+    
+    // We create a final version of the row to send back to the admin page,
+    // ensuring it has the newly calculated coordinates so the UI updates instantly.
+    const finalUpdatedRow = {
+        ...updatedRow,
+        latitude: coordinates?.lat || null,
+        longitude: coordinates?.lng || null,
+        match_level: coordinates?.matchLevel || 'none',
+    };
+
+    return NextResponse.json({ success: true, updatedRow: finalUpdatedRow });
   } catch(error) {
     console.error("Database PUT Error:", error);
     return NextResponse.json({ error: "Failed to update data in database." }, { status: 500 });
   }
 }
 
-// DELETE: Removes a lab submission from the database
+// The DELETE function remains the same.
 export async function DELETE(request: NextRequest) {
     try {
         const { id } = await request.json();
@@ -94,4 +118,3 @@ export async function DELETE(request: NextRequest) {
         return NextResponse.json({ error: "Failed to delete data from database." }, { status: 500 });
     }
 }
-

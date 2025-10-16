@@ -2,8 +2,8 @@
 
 import { useEffect, useState, FormEvent } from 'react';
 // FIX: Changed from path alias to a direct relative path
-import EditableTable from '../../components/EditableTable';
-import type { Column } from '../../components/EditableTable';
+import EditableTable from '@/components/EditableTable';
+import type { Column } from '@/components/EditableTable';
 
 // --- Interfaces for our data ---
 export interface LabMetadata {
@@ -32,12 +32,10 @@ export interface ContactLogEntry {
 const CORRECT_PASSWORD = 'toxins';
 
 export default function AdminPage() {
-  // --- STATE FOR AUTHENTICATION ---
+  const [isClient, setIsClient] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState('');
-
-  // --- STATE FOR DATA ---
   const [labSubmissions, setLabSubmissions] = useState<LabMetadata[]>([]);
   const [isolateSubmissions, setIsolateSubmissions] = useState<IsolateData[]>([]);
   const [contactLog, setContactLog] = useState<ContactLogEntry[]>([]);
@@ -46,7 +44,10 @@ export default function AdminPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Only load data if the user is authenticated
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
     if (!isAuthenticated) return;
 
     const loadAllData = async () => {
@@ -73,7 +74,6 @@ export default function AdminPage() {
 
       } catch (err: unknown) {
         console.error(err);
-        // Add a check to safely handle the error
         if (err instanceof Error) {
           setError(err.message);
         } else {
@@ -84,9 +84,7 @@ export default function AdminPage() {
       }
     };
     loadAllData();
-  }, [isAuthenticated]); // Rerun this effect when authentication status changes
-
-  // --- HANDLERS ---
+  }, [isAuthenticated]);
 
   const handlePasswordSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -156,13 +154,23 @@ export default function AdminPage() {
   };
 
   const labColumns: Column[] = [
-    { key: 'lab_name', header: 'Lab Name' }, { key: 'institution', header: 'Institution' }, { key: 'city', header: 'City' },
-    { key: 'country', header: 'Country' }, { key: 'contact_email', header: 'Contact' }, { key: 'latitude', header: 'Lat' },
+    { key: 'lab_name', header: 'Lab Name' }, { key: 'institution', header: 'Institution' },
+    { key: 'city', header: 'City' }, 
+    { key: 'state', header: 'State/Region' }, 
+    { key: 'country', header: 'Country' },
+    { key: 'contact_email', header: 'Contact' }, { key: 'latitude', header: 'Lat' },
     { key: 'longitude', header: 'Lng' }, { key: 'match_level', header: 'Match' },
   ];
   const isolateColumns: Column[] = [
-    { key: 'submitting_lab', header: 'Submitting Lab' }, { key: 'strain_name', header: 'Strain Name' }, { key: 'strain_origin', header: 'Origin' },
-    { key: 'genotype_details_json', header: 'Genotype (JSON)', type: 'textarea' }, { key: 'other_genes_json', header: 'Other Genes (JSON)', type: 'textarea' },
+    { key: 'submitting_lab', header: 'Submitting Lab' }, 
+    { key: 'strain_name', header: 'Strain Name' }, 
+    { key: 'strain_origin', header: 'Origin' },
+    { key: 'strain_center_name', header: 'Strain Center' },
+    { key: 'strain_center_location', header: 'Center Location' },
+    { key: 'sharing_lab_name', header: 'Sharing Lab' },
+    { key: 'genotype_details_json', header: 'Genotype (JSON)', type: 'textarea' }, 
+    { key: 'other_genes_json', header: 'Other Genes (JSON)', type: 'textarea' },
+    { key: 'other_mutations', header: 'Other Mutations', type: 'textarea' },
   ];
   const contactColumns: Column[] = [
     { key: 'labName', header: 'Lab Name' }, { key: 'institution', header: 'Institution' }, { key: 'email', header: 'Email' },
@@ -170,8 +178,10 @@ export default function AdminPage() {
     { key: 'contactedBy', header: 'Contacted By' },
     { key: 'comments', header: "Comments", type: 'textarea'}
   ];
-
-  // --- RENDER LOGIC ---
+  
+  if (!isClient) {
+    return null;
+  }
 
   if (!isAuthenticated) {
     return (
@@ -236,3 +246,4 @@ export default function AdminPage() {
     </div>
   );
 }
+
