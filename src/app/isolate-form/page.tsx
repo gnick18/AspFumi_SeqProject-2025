@@ -89,9 +89,10 @@ export default function IsolateForm() {
               .filter((name: string): name is string => typeof name === 'string' && name.length > 0);
             
             // FIX: Changed to Array.from() to preserve the string[] type.
-            const uniqueNames = Array.from(new Set(validNames));
+            const uniqueNames = [...new Set(validNames)];
+            const string_uniqueNames: string[] = uniqueNames as string[]
             
-            setLabNames(uniqueNames.sort((a, b) => a.localeCompare(b)));
+            setLabNames(string_uniqueNames.sort((a, b) => a.localeCompare(b)));
           }
         }
       } catch (error) {

@@ -640,10 +640,6 @@
     display: inline-block;
   }
 
-  .table {
-    display: table;
-  }
-
   .h-3 {
     height: calc(var(--spacing) * 3);
   }

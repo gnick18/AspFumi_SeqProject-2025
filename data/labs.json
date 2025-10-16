@@ -38,5 +38,14 @@
     "lat": 43.0731,
     "lng": -89.4012,
     "matchLevel": "city"
+  },
+  {
+    "id": "lab_1760455961652",
+    "name": "Test Lab",
+    "institution": "UCLA",
+    "location": "Los Angeles , California, United States",
+    "country": "United States",
+    "lat": 34.0536909,
+    "lng": -118.242766
   }
 ]
