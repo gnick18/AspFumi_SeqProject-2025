@@ -163,7 +163,7 @@ function IsolateForm() {
                 other_genes: prev.other_genes.filter((_, index)=>index !== indexToRemove)
             }));
     };
-    // Validation function ---
+    // Validation function --
     const validateForm = ()=>{
         const newErrors = {};
         if (!formData.submitting_lab) {

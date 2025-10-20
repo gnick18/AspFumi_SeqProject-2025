@@ -170,7 +170,7 @@ export default function IsolateForm() {
     setFormData(prev => ({ ...prev, other_genes: prev.other_genes.filter((_, index) => index !== indexToRemove) }));
   };
 
-  // Validation function ---
+  // Validation function --
   const validateForm = (): FormErrors => {
     const newErrors: FormErrors = {};
     if (!formData.submitting_lab) {
