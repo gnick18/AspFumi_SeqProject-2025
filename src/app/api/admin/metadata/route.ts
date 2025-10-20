@@ -35,7 +35,6 @@ async function seedInitialData(sql: NeonQueryFunction<false, false>) {
 }
 
 // --- API Methods ---
-
 // GET: Fetches all lab submissions from the database
 export async function GET() {
   const sql = neon(process.env.POSTGRES_URL!);

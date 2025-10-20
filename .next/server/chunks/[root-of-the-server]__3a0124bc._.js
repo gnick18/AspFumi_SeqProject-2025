@@ -65,8 +65,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$neondataba
 async function POST(request) {
     try {
         const data = await request.json();
-        // Basic validation remains the same
-        if (!data.submittingLab || !data.strainName) {
+        console.log('Received data on server:', data);
+        // --- FIX 1: VALIDATE USING snake_case ---
+        if (!data.submitting_lab || !data.strain_name) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: 'Missing required fields: Submitting Lab and Strain Name.'
             }, {
@@ -75,11 +76,10 @@ async function POST(request) {
         }
         // 2. CONNECT TO THE DATABASE
         const sql = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$neondatabase$2f$serverless$2f$index$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["neon"])(process.env.POSTGRES_URL);
-        // As before, we convert the complex objects into JSON strings to store them.
-        const genotypeString = JSON.stringify(data.genotype);
-        const otherGenesString = JSON.stringify(data.otherGenes);
+        // --- FIX 2: NO LONGER NEED TO STRINGIFY ---
+        // The data is already coming in as a string from the frontend.
         // 3. INSERT DATA INTO THE DATABASE
-        // This replaces all the old file-writing logic.
+        //    Using snake_case keys directly from the 'data' object
         await sql`
       INSERT INTO isolate_submissions (
         submitting_lab, strain_name, strain_origin,
@@ -87,10 +87,10 @@ async function POST(request) {
         sharing_lab_name, sharing_lab_institute, sharing_lab_location,
         genotype_details_json, other_genes_json, other_mutations
       ) VALUES (
-        ${data.submittingLab}, ${data.strainName}, ${data.strainOrigin},
-        ${data.strainCenterName || null}, ${data.strainCenterLocation || null}, ${data.strainCenterDate || null},
-        ${data.sharingLabName || null}, ${data.sharingLabInstitute || null}, ${data.sharingLabLocation || null},
-        ${genotypeString}, ${otherGenesString}, ${data.otherMutations || null}
+        ${data.submitting_lab}, ${data.strain_name}, ${data.strain_origin},
+        ${data.strain_center_name || null}, ${data.strain_center_location || null}, ${data.strain_center_date || null},
+        ${data.sharing_lab_name || null}, ${data.sharing_lab_institute || null}, ${data.sharing_lab_location || null},
+        ${data.genotype_details_json}, ${data.other_genes_json}, ${data.other_mutations || null}
       );
     `;
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
