@@ -13,15 +13,15 @@ interface Lab {
 }
 
 // Helper function to convert a database row (snake_case) to the frontend format (camelCase)
-function dbRowToLab(dbRow: Record<string, any>): Lab {
+function dbRowToLab(dbRow: Record<string, string | number | null>): Lab {
   return {
-      id: dbRow.id.toString(),
-      name: dbRow.lab_name,
-      institution: dbRow.institution,
-      location: `${dbRow.city}${dbRow.state ? ', ' + dbRow.state : ''}, ${dbRow.country}`,
-      country: dbRow.country,
-      lat: parseFloat(dbRow.latitude),
-      lng: parseFloat(dbRow.longitude),
+    id: String(dbRow.id ?? ''),
+    name: String(dbRow.lab_name ?? ''),
+    institution: String(dbRow.institution ?? ''),
+    location: `${String(dbRow.city ?? '')}${dbRow.state ? ', ' + String(dbRow.state) : ''}, ${String(dbRow.country ?? '')}`,
+    country: String(dbRow.country ?? ''),
+    lat: parseFloat(String(dbRow.latitude ?? '0')),
+    lng: parseFloat(String(dbRow.longitude ?? '0')),
   };
 }
 
