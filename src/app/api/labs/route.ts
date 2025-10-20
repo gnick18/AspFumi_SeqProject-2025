@@ -12,7 +12,7 @@ interface Lab {
   lng: number;
 }
 
-// Helper function to convert a database row (snake_case) to the frontend format (camelCase)
+// Helper function to convert a database row (snake_case) to the frontend format (camelCase) 
 function dbRowToLab(dbRow: Record<string, string | number | null>): Lab {
   return {
     id: String(dbRow.id ?? ''),
