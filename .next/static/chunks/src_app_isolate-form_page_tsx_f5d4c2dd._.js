@@ -138,13 +138,16 @@ function IsolateForm() {
             if (field.startsWith('genotype.')) {
                 const [, mutation, key] = field.split('.');
                 const mutationState = newState.genotype[mutation];
+                // Use Record to satisfy the index signature requirement for dynamic keys
                 mutationState[key] = value;
             } else if (field.startsWith('other_genes.')) {
                 const [, indexStr, key] = field.split('.');
                 const index = parseInt(indexStr, 10);
                 const geneState = newState.other_genes[index];
+                // Use Record here as well
                 geneState[key] = value;
             } else {
+                // And here for top-level properties
                 newState[field] = value;
             }
             return newState;
@@ -285,7 +288,7 @@ function IsolateForm() {
                     children: "Isolate Information Form"
                 }, void 0, false, {
                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                    lineNumber: 244,
+                    lineNumber: 247,
                     columnNumber: 44
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -302,7 +305,7 @@ function IsolateForm() {
                                     children: "Access Required"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 244,
+                                    lineNumber: 247,
                                     columnNumber: 232
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -310,13 +313,13 @@ function IsolateForm() {
                                     children: "Please enter the password to access the submission form for isolate information. Each strain you send should have its own submission."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 244,
+                                    lineNumber: 247,
                                     columnNumber: 334
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                            lineNumber: 244,
+                            lineNumber: 247,
                             columnNumber: 210
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -331,7 +334,7 @@ function IsolateForm() {
                                             children: "Password:"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 244,
+                                            lineNumber: 247,
                                             columnNumber: 572
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -347,13 +350,13 @@ function IsolateForm() {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 244,
+                                            lineNumber: 247,
                                             columnNumber: 658
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 244,
+                                    lineNumber: 247,
                                     columnNumber: 567
                                 }, this),
                                 passwordError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -365,7 +368,7 @@ function IsolateForm() {
                                     children: passwordError
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 244,
+                                    lineNumber: 247,
                                     columnNumber: 922
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -378,25 +381,25 @@ function IsolateForm() {
                                     children: "Access Form"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 244,
+                                    lineNumber: 247,
                                     columnNumber: 1034
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                            lineNumber: 244,
+                            lineNumber: 247,
                             columnNumber: 507
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                    lineNumber: 244,
+                    lineNumber: 247,
                     columnNumber: 156
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/isolate-form/page.tsx",
-            lineNumber: 244,
+            lineNumber: 247,
             columnNumber: 9
         }, this);
     }
@@ -412,7 +415,7 @@ function IsolateForm() {
                         mutationName,
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                            lineNumber: 251,
+                            lineNumber: 254,
                             columnNumber: 136
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -420,13 +423,13 @@ function IsolateForm() {
                             children: "(say Yes even if it was complemented back in)"
                         }, void 0, false, {
                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                            lineNumber: 251,
+                            lineNumber: 254,
                             columnNumber: 141
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                    lineNumber: 251,
+                    lineNumber: 254,
                     columnNumber: 78
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -445,7 +448,7 @@ function IsolateForm() {
                                     children: "Select..."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 251,
+                                    lineNumber: 254,
                                     columnNumber: 493
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -453,7 +456,7 @@ function IsolateForm() {
                                     children: "Yes"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 251,
+                                    lineNumber: 254,
                                     columnNumber: 528
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -461,13 +464,13 @@ function IsolateForm() {
                                     children: "No"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 251,
+                                    lineNumber: 254,
                                     columnNumber: 560
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                            lineNumber: 251,
+                            lineNumber: 254,
                             columnNumber: 294
                         }, this),
                         data.present === 'Yes' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -481,7 +484,7 @@ function IsolateForm() {
                                             children: "Type:"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 253,
+                                            lineNumber: 256,
                                             columnNumber: 89
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -497,7 +500,7 @@ function IsolateForm() {
                                                     children: "Select Ku Type..."
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 253,
+                                                    lineNumber: 256,
                                                     columnNumber: 344
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -505,7 +508,7 @@ function IsolateForm() {
                                                     children: "ku70"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 253,
+                                                    lineNumber: 256,
                                                     columnNumber: 387
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -513,19 +516,19 @@ function IsolateForm() {
                                                     children: "ku80"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 253,
+                                                    lineNumber: 256,
                                                     columnNumber: 421
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 253,
+                                            lineNumber: 256,
                                             columnNumber: 136
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 253,
+                                    lineNumber: 256,
                                     columnNumber: 36
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -536,7 +539,7 @@ function IsolateForm() {
                                             children: "Complemented?"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 254,
+                                            lineNumber: 257,
                                             columnNumber: 78
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -552,7 +555,7 @@ function IsolateForm() {
                                                     children: "Select..."
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 254,
+                                                    lineNumber: 257,
                                                     columnNumber: 353
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -560,7 +563,7 @@ function IsolateForm() {
                                                     children: "Yes"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 254,
+                                                    lineNumber: 257,
                                                     columnNumber: 388
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -568,19 +571,19 @@ function IsolateForm() {
                                                     children: "No"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 254,
+                                                    lineNumber: 257,
                                                     columnNumber: 420
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 254,
+                                            lineNumber: 257,
                                             columnNumber: 133
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 254,
+                                    lineNumber: 257,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -591,7 +594,7 @@ function IsolateForm() {
                                             children: "Method:"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 255,
+                                            lineNumber: 258,
                                             columnNumber: 77
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -610,7 +613,7 @@ function IsolateForm() {
                                                             children: "Select Method..."
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                            lineNumber: 255,
+                                                            lineNumber: 258,
                                                             columnNumber: 366
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -618,7 +621,7 @@ function IsolateForm() {
                                                             children: "Homologous Recombination"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                            lineNumber: 255,
+                                                            lineNumber: 258,
                                                             columnNumber: 408
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -626,7 +629,7 @@ function IsolateForm() {
                                                             children: "UV Mutagenesis"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                            lineNumber: 255,
+                                                            lineNumber: 258,
                                                             columnNumber: 482
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -634,7 +637,7 @@ function IsolateForm() {
                                                             children: "Chemical Mutagenesis"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                            lineNumber: 255,
+                                                            lineNumber: 258,
                                                             columnNumber: 536
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -642,7 +645,7 @@ function IsolateForm() {
                                                             children: "CRISPR"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                            lineNumber: 255,
+                                                            lineNumber: 258,
                                                             columnNumber: 602
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -650,7 +653,7 @@ function IsolateForm() {
                                                             children: "Other (Please specify)"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                            lineNumber: 255,
+                                                            lineNumber: 258,
                                                             columnNumber: 640
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -658,13 +661,13 @@ function IsolateForm() {
                                                             children: "Unknown"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                            lineNumber: 255,
+                                                            lineNumber: 258,
                                                             columnNumber: 693
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 255,
+                                                    lineNumber: 258,
                                                     columnNumber: 169
                                                 }, this),
                                                 data.method === 'Homologous Recombination' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -675,7 +678,7 @@ function IsolateForm() {
                                                     placeholder: "Specify marker gene"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 256,
+                                                    lineNumber: 259,
                                                     columnNumber: 80
                                                 }, this),
                                                 data.method === 'Chemical Mutagenesis' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -686,7 +689,7 @@ function IsolateForm() {
                                                     placeholder: "Specify chemical"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 257,
+                                                    lineNumber: 260,
                                                     columnNumber: 76
                                                 }, this),
                                                 data.method === 'Other' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -697,19 +700,19 @@ function IsolateForm() {
                                                     placeholder: "Specify other method"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 258,
+                                                    lineNumber: 261,
                                                     columnNumber: 61
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 255,
+                                            lineNumber: 258,
                                             columnNumber: 131
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 255,
+                                    lineNumber: 258,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -720,7 +723,7 @@ function IsolateForm() {
                                             children: "Mutation Date (Optional):"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 260,
+                                            lineNumber: 263,
                                             columnNumber: 79
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -733,31 +736,31 @@ function IsolateForm() {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 260,
+                                            lineNumber: 263,
                                             columnNumber: 146
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 260,
+                                    lineNumber: 263,
                                     columnNumber: 26
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                            lineNumber: 252,
+                            lineNumber: 255,
                             columnNumber: 45
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                    lineNumber: 251,
+                    lineNumber: 254,
                     columnNumber: 253
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/isolate-form/page.tsx",
-            lineNumber: 251,
+            lineNumber: 254,
             columnNumber: 9
         }, this);
     };
@@ -772,7 +775,7 @@ function IsolateForm() {
                 children: "Isolate Information Submission"
             }, void 0, false, {
                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                lineNumber: 269,
+                lineNumber: 272,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -786,14 +789,14 @@ function IsolateForm() {
                                 children: "each individual isolate"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 270,
+                                lineNumber: 273,
                                 columnNumber: 126
                             }, this),
                             " you are sending. After submitting, the form will clear."
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                        lineNumber: 270,
+                        lineNumber: 273,
                         columnNumber: 66
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -808,20 +811,20 @@ function IsolateForm() {
                                 children: "*"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 270,
+                                lineNumber: 273,
                                 columnNumber: 307
                             }, this),
                             " are required."
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                        lineNumber: 270,
+                        lineNumber: 273,
                         columnNumber: 226
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                lineNumber: 270,
+                lineNumber: 273,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -841,13 +844,13 @@ function IsolateForm() {
                                         children: "*"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 274,
+                                        lineNumber: 277,
                                         columnNumber: 113
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 274,
+                                lineNumber: 277,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -863,7 +866,7 @@ function IsolateForm() {
                                         children: loadingLabs ? 'Loading labs...' : 'Select your laboratory'
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 276,
+                                        lineNumber: 279,
                                         columnNumber: 13
                                     }, this),
                                     labNames.map((name)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -871,13 +874,13 @@ function IsolateForm() {
                                             children: name
                                         }, name, false, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 277,
+                                            lineNumber: 280,
                                             columnNumber: 36
                                         }, this))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 275,
+                                lineNumber: 278,
                                 columnNumber: 11
                             }, this),
                             errors.submitting_lab && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -885,13 +888,13 @@ function IsolateForm() {
                                 children: errors.submitting_lab
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 279,
+                                lineNumber: 282,
                                 columnNumber: 37
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                        lineNumber: 272,
+                        lineNumber: 275,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -906,13 +909,13 @@ function IsolateForm() {
                                         children: "*"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 283,
+                                        lineNumber: 286,
                                         columnNumber: 100
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 283,
+                                lineNumber: 286,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -925,7 +928,7 @@ function IsolateForm() {
                                 required: true
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 284,
+                                lineNumber: 287,
                                 columnNumber: 13
                             }, this),
                             errors.strain_name && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -933,13 +936,13 @@ function IsolateForm() {
                                 children: errors.strain_name
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 285,
+                                lineNumber: 288,
                                 columnNumber: 36
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                        lineNumber: 281,
+                        lineNumber: 284,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -956,7 +959,7 @@ function IsolateForm() {
                                 children: "Genotype Information"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 287,
+                                lineNumber: 290,
                                 columnNumber: 101
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(MutationRow, {
@@ -965,7 +968,7 @@ function IsolateForm() {
                                 isKu: true
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 287,
+                                lineNumber: 290,
                                 columnNumber: 208
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(MutationRow, {
@@ -973,7 +976,7 @@ function IsolateForm() {
                                 mutationKey: "pyrG"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 287,
+                                lineNumber: 290,
                                 columnNumber: 274
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(MutationRow, {
@@ -981,13 +984,13 @@ function IsolateForm() {
                                 mutationKey: "argB"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 287,
+                                lineNumber: 290,
                                 columnNumber: 339
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                        lineNumber: 287,
+                        lineNumber: 290,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1001,7 +1004,7 @@ function IsolateForm() {
                                 children: "Add Additional Gene Mutation Information"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 288,
+                                lineNumber: 291,
                                 columnNumber: 101
                             }, this),
                             formData.other_genes.map((gene, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1014,7 +1017,7 @@ function IsolateForm() {
                                             children: "X"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 288,
+                                            lineNumber: 291,
                                             columnNumber: 337
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1025,7 +1028,7 @@ function IsolateForm() {
                                                     children: "Gene Name:"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 288,
+                                                    lineNumber: 291,
                                                     columnNumber: 541
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1036,13 +1039,13 @@ function IsolateForm() {
                                                     placeholder: "e.g., ΔabcA"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 288,
+                                                    lineNumber: 291,
                                                     columnNumber: 598
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 288,
+                                            lineNumber: 291,
                                             columnNumber: 485
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1057,7 +1060,7 @@ function IsolateForm() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 288,
+                                                    lineNumber: 291,
                                                     columnNumber: 884
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1071,7 +1074,7 @@ function IsolateForm() {
                                                                     children: "Complemented?"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                    lineNumber: 288,
+                                                                    lineNumber: 291,
                                                                     columnNumber: 1073
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1087,7 +1090,7 @@ function IsolateForm() {
                                                                             children: "Select..."
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                            lineNumber: 288,
+                                                                            lineNumber: 291,
                                                                             columnNumber: 1345
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1095,7 +1098,7 @@ function IsolateForm() {
                                                                             children: "Yes"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                            lineNumber: 288,
+                                                                            lineNumber: 291,
                                                                             columnNumber: 1380
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1103,19 +1106,19 @@ function IsolateForm() {
                                                                             children: "No"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                            lineNumber: 288,
+                                                                            lineNumber: 291,
                                                                             columnNumber: 1412
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                    lineNumber: 288,
+                                                                    lineNumber: 291,
                                                                     columnNumber: 1128
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                            lineNumber: 288,
+                                                            lineNumber: 291,
                                                             columnNumber: 1020
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1126,7 +1129,7 @@ function IsolateForm() {
                                                                     children: "Method:"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                    lineNumber: 288,
+                                                                    lineNumber: 291,
                                                                     columnNumber: 1509
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1145,7 +1148,7 @@ function IsolateForm() {
                                                                                     children: "Select Method..."
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                                    lineNumber: 288,
+                                                                                    lineNumber: 291,
                                                                                     columnNumber: 1795
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1153,7 +1156,7 @@ function IsolateForm() {
                                                                                     children: "Homologous Recombination"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                                    lineNumber: 288,
+                                                                                    lineNumber: 291,
                                                                                     columnNumber: 1837
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1161,7 +1164,7 @@ function IsolateForm() {
                                                                                     children: "UV Mutagenesis"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                                    lineNumber: 288,
+                                                                                    lineNumber: 291,
                                                                                     columnNumber: 1911
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1169,7 +1172,7 @@ function IsolateForm() {
                                                                                     children: "Chemical Mutagenesis"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                                    lineNumber: 288,
+                                                                                    lineNumber: 291,
                                                                                     columnNumber: 1965
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1177,7 +1180,7 @@ function IsolateForm() {
                                                                                     children: "CRISPR"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                                    lineNumber: 288,
+                                                                                    lineNumber: 291,
                                                                                     columnNumber: 2031
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1185,7 +1188,7 @@ function IsolateForm() {
                                                                                     children: "Other (Please specify)"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                                    lineNumber: 288,
+                                                                                    lineNumber: 291,
                                                                                     columnNumber: 2069
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1193,13 +1196,13 @@ function IsolateForm() {
                                                                                     children: "Unknown"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                                    lineNumber: 288,
+                                                                                    lineNumber: 291,
                                                                                     columnNumber: 2122
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                            lineNumber: 288,
+                                                                            lineNumber: 291,
                                                                             columnNumber: 1601
                                                                         }, this),
                                                                         gene.method === 'Homologous Recombination' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1210,7 +1213,7 @@ function IsolateForm() {
                                                                             placeholder: "Specify marker gene"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                            lineNumber: 288,
+                                                                            lineNumber: 291,
                                                                             columnNumber: 2218
                                                                         }, this),
                                                                         gene.method === 'Chemical Mutagenesis' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1221,7 +1224,7 @@ function IsolateForm() {
                                                                             placeholder: "Specify chemical"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                            lineNumber: 288,
+                                                                            lineNumber: 291,
                                                                             columnNumber: 2470
                                                                         }, this),
                                                                         gene.method === 'Other' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1232,19 +1235,19 @@ function IsolateForm() {
                                                                             placeholder: "Specify other method"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                            lineNumber: 288,
+                                                                            lineNumber: 291,
                                                                             columnNumber: 2708
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                    lineNumber: 288,
+                                                                    lineNumber: 291,
                                                                     columnNumber: 1563
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                            lineNumber: 288,
+                                                            lineNumber: 291,
                                                             columnNumber: 1457
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1255,7 +1258,7 @@ function IsolateForm() {
                                                                     children: "Mutation Date (Optional):"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                    lineNumber: 288,
+                                                                    lineNumber: 291,
                                                                     columnNumber: 2985
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1268,31 +1271,31 @@ function IsolateForm() {
                                                                     }
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                                    lineNumber: 288,
+                                                                    lineNumber: 291,
                                                                     columnNumber: 3052
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                            lineNumber: 288,
+                                                            lineNumber: 291,
                                                             columnNumber: 2932
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                                    lineNumber: 288,
+                                                    lineNumber: 291,
                                                     columnNumber: 979
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                                            lineNumber: 288,
+                                            lineNumber: 291,
                                             columnNumber: 810
                                         }, this)
                                     ]
                                 }, index, true, {
                                     fileName: "[project]/src/app/isolate-form/page.tsx",
-                                    lineNumber: 288,
+                                    lineNumber: 291,
                                     columnNumber: 266
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1302,13 +1305,13 @@ function IsolateForm() {
                                 children: "+ Add Another Gene"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 288,
+                                lineNumber: 291,
                                 columnNumber: 3309
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                        lineNumber: 288,
+                        lineNumber: 291,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1325,7 +1328,7 @@ function IsolateForm() {
                                 children: "Strain Origin"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 289,
+                                lineNumber: 292,
                                 columnNumber: 101
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1342,7 +1345,7 @@ function IsolateForm() {
                                         children: "Select origin..."
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 289,
+                                        lineNumber: 292,
                                         columnNumber: 411
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1350,7 +1353,7 @@ function IsolateForm() {
                                         children: "From a Strain Center"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 289,
+                                        lineNumber: 292,
                                         columnNumber: 453
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1358,7 +1361,7 @@ function IsolateForm() {
                                         children: "Shared by Another Lab"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 289,
+                                        lineNumber: 292,
                                         columnNumber: 512
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1366,13 +1369,13 @@ function IsolateForm() {
                                         children: "Generated In-house"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 289,
+                                        lineNumber: 292,
                                         columnNumber: 572
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 289,
+                                lineNumber: 292,
                                 columnNumber: 201
                             }, this),
                             formData.strain_origin === 'Strain Center' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1386,7 +1389,7 @@ function IsolateForm() {
                                         placeholder: "Name of Center"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 289,
+                                        lineNumber: 292,
                                         columnNumber: 752
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1397,7 +1400,7 @@ function IsolateForm() {
                                         placeholder: "Location of Center"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 289,
+                                        lineNumber: 292,
                                         columnNumber: 942
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1408,13 +1411,13 @@ function IsolateForm() {
                                         placeholder: "Date Sent"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 289,
+                                        lineNumber: 292,
                                         columnNumber: 1144
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 289,
+                                lineNumber: 292,
                                 columnNumber: 681
                             }, this),
                             formData.strain_origin === 'Shared by Lab' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1428,7 +1431,7 @@ function IsolateForm() {
                                         placeholder: "Name of Lab"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 289,
+                                        lineNumber: 292,
                                         columnNumber: 1456
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1439,7 +1442,7 @@ function IsolateForm() {
                                         placeholder: "Institute of Lab"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 289,
+                                        lineNumber: 292,
                                         columnNumber: 1639
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1450,19 +1453,19 @@ function IsolateForm() {
                                         placeholder: "Location of Lab"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                                        lineNumber: 289,
+                                        lineNumber: 292,
                                         columnNumber: 1837
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 289,
+                                lineNumber: 292,
                                 columnNumber: 1385
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                        lineNumber: 289,
+                        lineNumber: 292,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1473,7 +1476,7 @@ function IsolateForm() {
                                 children: "Other General Genotype Info"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 290,
+                                lineNumber: 293,
                                 columnNumber: 14
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1488,13 +1491,13 @@ function IsolateForm() {
                                 placeholder: "e.g., Reporter::GFP, general strain background notes, etc."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                                lineNumber: 290,
+                                lineNumber: 293,
                                 columnNumber: 125
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                        lineNumber: 290,
+                        lineNumber: 293,
                         columnNumber: 9
                     }, this),
                     submitMessage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1502,7 +1505,7 @@ function IsolateForm() {
                         children: submitMessage
                     }, void 0, false, {
                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                        lineNumber: 291,
+                        lineNumber: 294,
                         columnNumber: 28
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1514,24 +1517,24 @@ function IsolateForm() {
                             children: isSubmitting ? 'Submitting...' : 'Submit Isolate'
                         }, void 0, false, {
                             fileName: "[project]/src/app/isolate-form/page.tsx",
-                            lineNumber: 292,
+                            lineNumber: 295,
                             columnNumber: 43
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/isolate-form/page.tsx",
-                        lineNumber: 292,
+                        lineNumber: 295,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/isolate-form/page.tsx",
-                lineNumber: 271,
+                lineNumber: 274,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/isolate-form/page.tsx",
-        lineNumber: 268,
+        lineNumber: 271,
         columnNumber: 5
     }, this);
 }

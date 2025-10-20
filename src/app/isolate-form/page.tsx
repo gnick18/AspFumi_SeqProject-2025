@@ -144,16 +144,19 @@ export default function IsolateForm() {
     setFormData(prev => {
         const newState = JSON.parse(JSON.stringify(prev));
         if (field.startsWith('genotype.')) {
-            const [, mutation, key] = field.split('.');
-            const mutationState = newState.genotype[mutation as keyof GenotypeInfo];
-            (mutationState as any)[key] = value;
+          const [, mutation, key] = field.split('.');
+          const mutationState = newState.genotype[mutation as keyof GenotypeInfo];
+          // Use Record to satisfy the index signature requirement for dynamic keys
+          (mutationState as Record<string, string>)[key] = value;
         } else if (field.startsWith('other_genes.')) {
-            const [, indexStr, key] = field.split('.');
-            const index = parseInt(indexStr, 10);
-            const geneState = newState.other_genes[index];
-            (geneState as any)[key] = value;
+          const [, indexStr, key] = field.split('.');
+          const index = parseInt(indexStr, 10);
+          const geneState = newState.other_genes[index];
+          // Use Record here as well
+          (geneState as Record<string, string>)[key] = value;
         } else {
-            (newState as any)[field] = value;
+          // And here for top-level properties
+          (newState as Record<string, unknown>)[field] = value;
         }
         return newState;
     });
