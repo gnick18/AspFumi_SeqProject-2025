@@ -49,8 +49,6 @@ Running the Application
 ## Available Scripts
 In the project directory you can run:
 - `npm run dev`: Runs the app in development mode
--  `npm run build`: Builds the app for production.
--  `npm run start`: Starts a production server.
 -  `npm run lint`: Runs the linter to check for code quality issues.
 
 ## Learn More
