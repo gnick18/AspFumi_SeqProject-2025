@@ -170,7 +170,7 @@ export default function IsolateForm() {
     setFormData(prev => ({ ...prev, other_genes: prev.other_genes.filter((_, index) => index !== indexToRemove) }));
   };
 
-  // --- NEW: Validation function ---
+  // Validation function ---
   const validateForm = (): FormErrors => {
     const newErrors: FormErrors = {};
     if (!formData.submitting_lab) {
@@ -186,7 +186,7 @@ export default function IsolateForm() {
     e.preventDefault();
     setSubmitMessage('');
 
-    // --- NEW: Validate form before submitting ---
+    // Validate form before submitting ---
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);

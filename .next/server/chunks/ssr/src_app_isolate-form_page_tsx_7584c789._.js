@@ -163,7 +163,7 @@ function IsolateForm() {
                 other_genes: prev.other_genes.filter((_, index)=>index !== indexToRemove)
             }));
     };
-    // --- NEW: Validation function ---
+    // Validation function ---
     const validateForm = ()=>{
         const newErrors = {};
         if (!formData.submitting_lab) {
@@ -177,7 +177,7 @@ function IsolateForm() {
     const handleFormSubmit = async (e)=>{
         e.preventDefault();
         setSubmitMessage('');
-        // --- NEW: Validate form before submitting ---
+        // Validate form before submitting ---
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
