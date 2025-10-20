@@ -5,8 +5,12 @@
   "/api/admin/metadata/route": "app/api/admin/metadata/route.js",
   "/api/labs/route": "app/api/labs/route.js",
   "/api/submit-isolate/route": "app/api/submit-isolate/route.js",
+  "/api/submit-metadata/route": "app/api/submit-metadata/route.js",
+  "/faq/page": "app/faq/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/isolate-form/page": "app/isolate-form/page.js",
+  "/join/page": "app/join/page.js",
+  "/map/page": "app/map/page.js",
   "/metadata-form/page": "app/metadata-form/page.js",
   "/page": "app/page.js"
 }

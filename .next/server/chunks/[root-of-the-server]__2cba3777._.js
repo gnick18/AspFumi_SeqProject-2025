@@ -1,5 +1,5 @@
 module.exports = [
-"[project]/.next-internal/server/app/api/labs/route/actions.js [app-rsc] (server actions loader, ecmascript)", ((__turbopack_context__, module, exports) => {
+"[project]/.next-internal/server/app/api/submit-metadata/route/actions.js [app-rsc] (server actions loader, ecmascript)", ((__turbopack_context__, module, exports) => {
 
 }),
 "[externals]/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js [external] (next/dist/compiled/next-server/app-route-turbo.runtime.dev.js, cjs)", ((__turbopack_context__, module, exports) => {
@@ -50,50 +50,110 @@ const mod = __turbopack_context__.x("next/dist/server/app-render/action-async-st
 
 module.exports = mod;
 }),
-"[project]/src/app/api/labs/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
+"[project]/src/lib/geocoding.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// This is a reusable, server-side function to get coordinates for a given location.
+__turbopack_context__.s([
+    "getCoordinates",
+    ()=>getCoordinates
+]);
+async function getCoordinates(city, state, country) {
+    const queries = [
+        `${city}, ${state}, ${country}`,
+        `${city}, ${country}`,
+        `${state}, ${country}`,
+        country
+    ].filter((q)=>q.trim() !== ',' && q.trim().length > 1);
+    for (const query of queries){
+        try {
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&accept-language=en&limit=1`;
+            const response = await fetch(url, {
+                headers: {
+                    'User-Agent': 'Aspergillus Community Sequencing Project'
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (data && data.length > 0) {
+                    const result = data[0];
+                    let matchLevel = 'country';
+                    const addressType = result.addresstype;
+                    if ([
+                        'city',
+                        'town',
+                        'village',
+                        'hamlet'
+                    ].includes(addressType)) {
+                        matchLevel = 'city';
+                    } else if ([
+                        'state',
+                        'province',
+                        'region',
+                        'county'
+                    ].includes(addressType)) {
+                        matchLevel = 'state';
+                    }
+                    return {
+                        lat: parseFloat(result.lat),
+                        lng: parseFloat(result.lon),
+                        matchLevel
+                    };
+                }
+            }
+        } catch (error) {
+            console.error(`Geocoding error for query "${query}":`, error);
+        }
+    }
+    return null;
+}
+}),
+"[project]/src/app/api/submit-metadata/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
-    "GET",
-    ()=>GET
+    "POST",
+    ()=>POST
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/server.js [app-route] (ecmascript)");
+// IMPORT THE DATABASE DRIVER
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$neondatabase$2f$serverless$2f$index$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@neondatabase/serverless/index.mjs [app-route] (ecmascript)");
+// Importing the geocoding function
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$geocoding$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/geocoding.ts [app-route] (ecmascript)");
 ;
 ;
-// Helper function to convert a database row (snake_case) to the frontend format (camelCase) 
-function dbRowToLab(dbRow) {
-    return {
-        id: String(dbRow.id ?? ''),
-        name: String(dbRow.lab_name ?? ''),
-        institution: String(dbRow.institution ?? ''),
-        location: `${String(dbRow.city ?? '')}${dbRow.state ? ', ' + String(dbRow.state) : ''}, ${String(dbRow.country ?? '')}`,
-        country: String(dbRow.country ?? ''),
-        lat: parseFloat(String(dbRow.latitude ?? '0')),
-        lng: parseFloat(String(dbRow.longitude ?? '0'))
-    };
-}
-async function GET() {
+;
+async function POST(request) {
     try {
-        // 1. Connect to the database
+        const data = await request.json();
         const sql = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$neondatabase$2f$serverless$2f$index$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["neon"])(process.env.POSTGRES_URL);
-        // 2. Fetch all lab submissions from the database
-        // We select only the columns needed for the public map to avoid sending extra data.
-        const dbResult = await sql`
-      SELECT id, lab_name, institution, city, state, country, latitude, longitude 
-      FROM lab_submissions 
-      WHERE latitude IS NOT NULL AND longitude IS NOT NULL;
+        // We now call the imported function. The logic from here down is the same as before.
+        const coordinates = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$geocoding$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["getCoordinates"])(data.city, data.state, data.country);
+        await sql`
+      INSERT INTO lab_submissions (
+        lab_name, institution, city, state, country, 
+        contact_name, contact_email, research_use, comments, 
+        latitude, longitude, match_level
+      ) VALUES (
+        ${data.labName}, ${data.institution}, ${data.city}, ${data.state}, ${data.country},
+        ${data.contactName}, ${data.contactEmail}, ${data.researchUse}, ${data.comments},
+        ${coordinates?.lat || null}, ${coordinates?.lng || null}, ${coordinates?.matchLevel || 'none'}
+      );
     `;
-        // 3. Transform the data into the format the frontend expects
-        const labs = dbResult.map(dbRowToLab);
+        let successMessage = 'Metadata submitted successfully';
+        if (coordinates) {
+            successMessage += ` Your laboratory will appear on our global map shortly (matched at ${coordinates.matchLevel} level).`;
+        } else {
+            successMessage += '. Note: Your location could not be automatically mapped and will be reviewed manually.';
+        }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
-            labs: labs
+            message: successMessage
         });
     } catch (error) {
-        console.error('Error fetching labs for map:', error);
+        console.error('Error processing submission:', error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Internal server error while fetching map data.'
+            error: 'Internal server error while processing submission.'
         }, {
             status: 500
         });
@@ -102,4 +162,4 @@ async function GET() {
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__ca7fdcef._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__2cba3777._.js.map

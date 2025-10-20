@@ -45,7 +45,8 @@ const EditableRow = <T extends { id: string }>({ row, columns, onSave, onDelete 
             // FIX 2: Added new logic to render a <select> dropdown if 'selectOptions' are provided.
             col.selectOptions ? (
               <select
-                value={rowData[col.key as keyof T] as string}
+                // --- FIX: Added '?? ""' to prevent null value ---
+                value={(rowData[col.key as keyof T] as string) ?? ''}
                 onChange={(e) => handleChange(col.key, e.target.value)}
                 className="w-full p-1 border rounded text-xs"
               >
@@ -55,7 +56,8 @@ const EditableRow = <T extends { id: string }>({ row, columns, onSave, onDelete 
               </select>
             ) : col.type === 'textarea' ? (
               <textarea
-                value={rowData[col.key as keyof T] as string}
+                // --- FIX: Added '?? ""' to prevent null value ---
+                value={(rowData[col.key as keyof T] as string) ?? ''}
                 onChange={(e) => handleChange(col.key, e.target.value)}
                 className="w-full p-1 border rounded text-xs"
                 rows={4}
@@ -63,13 +65,15 @@ const EditableRow = <T extends { id: string }>({ row, columns, onSave, onDelete 
             ) : (
               <input
                 type="text"
-                value={rowData[col.key as keyof T] as string}
+                // --- FIX: Added '?? ""' to prevent null value ---
+                value={(rowData[col.key as keyof T] as string) ?? ''}
                 onChange={(e) => handleChange(col.key, e.target.value)}
                 className="w-full p-1 border rounded"
               />
             )
           ) : (
-            <span className="line-clamp-2">{rowData[col.key as keyof T] as string}</span>
+            // --- FIX: Added '?? ""' here too for display consistency ---
+            <span className="line-clamp-2">{(rowData[col.key as keyof T] as string) ?? ''}</span>
           )}
         </td>
       ))}
@@ -89,8 +93,8 @@ const EditableRow = <T extends { id: string }>({ row, columns, onSave, onDelete 
               Edit
             </button>
              <button onClick={() => onDelete(row.id)} className="ml-2 text-sm text-red-600 hover:text-red-800">
-              Delete
-            </button>
+               Delete
+             </button>
           </>
         )}
       </td>

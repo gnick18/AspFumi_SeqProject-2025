@@ -35,11 +35,14 @@ const EditableRow = (param)=>{
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
         className: "border-b hover:bg-gray-50",
         children: [
-            columns.map((col)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+            columns.map((col)=>{
+                var _ref, _ref1, _ref2, _ref3;
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                     className: "p-2 text-sm align-top",
                     children: isEditing ? // FIX 2: Added new logic to render a <select> dropdown if 'selectOptions' are provided.
                     col.selectOptions ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                        value: rowData[col.key],
+                        // --- FIX: Added '?? ""' to prevent null value ---
+                        value: (_ref = rowData[col.key]) !== null && _ref !== void 0 ? _ref : '',
                         onChange: (e)=>handleChange(col.key, e.target.value),
                         className: "w-full p-1 border rounded text-xs",
                         children: col.selectOptions.map((option)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -47,7 +50,7 @@ const EditableRow = (param)=>{
                                 children: option
                             }, option, false, {
                                 fileName: "[project]/src/components/EditableTable.tsx",
-                                lineNumber: 53,
+                                lineNumber: 54,
                                 columnNumber: 19
                             }, ("TURBOPACK compile-time value", void 0)))
                     }, void 0, false, {
@@ -55,36 +58,40 @@ const EditableRow = (param)=>{
                         lineNumber: 47,
                         columnNumber: 15
                     }, ("TURBOPACK compile-time value", void 0)) : col.type === 'textarea' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
-                        value: rowData[col.key],
+                        // --- FIX: Added '?? ""' to prevent null value ---
+                        value: (_ref1 = rowData[col.key]) !== null && _ref1 !== void 0 ? _ref1 : '',
                         onChange: (e)=>handleChange(col.key, e.target.value),
                         className: "w-full p-1 border rounded text-xs",
                         rows: 4
                     }, void 0, false, {
                         fileName: "[project]/src/components/EditableTable.tsx",
-                        lineNumber: 57,
+                        lineNumber: 58,
                         columnNumber: 15
                     }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                         type: "text",
-                        value: rowData[col.key],
+                        // --- FIX: Added '?? ""' to prevent null value ---
+                        value: (_ref2 = rowData[col.key]) !== null && _ref2 !== void 0 ? _ref2 : '',
                         onChange: (e)=>handleChange(col.key, e.target.value),
                         className: "w-full p-1 border rounded"
                     }, void 0, false, {
                         fileName: "[project]/src/components/EditableTable.tsx",
-                        lineNumber: 64,
+                        lineNumber: 66,
                         columnNumber: 15
-                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    }, ("TURBOPACK compile-time value", void 0)) : // --- FIX: Added '?? ""' here too for display consistency ---
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         className: "line-clamp-2",
-                        children: rowData[col.key]
+                        children: (_ref3 = rowData[col.key]) !== null && _ref3 !== void 0 ? _ref3 : ''
                     }, void 0, false, {
                         fileName: "[project]/src/components/EditableTable.tsx",
-                        lineNumber: 72,
+                        lineNumber: 76,
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0))
                 }, col.key, false, {
                     fileName: "[project]/src/components/EditableTable.tsx",
                     lineNumber: 43,
                     columnNumber: 9
-                }, ("TURBOPACK compile-time value", void 0))),
+                }, ("TURBOPACK compile-time value", void 0));
+            }),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                 className: "p-2 text-right align-top",
                 children: isEditing ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -96,7 +103,7 @@ const EditableRow = (param)=>{
                             children: isSaving ? 'Saving...' : 'Save'
                         }, void 0, false, {
                             fileName: "[project]/src/components/EditableTable.tsx",
-                            lineNumber: 79,
+                            lineNumber: 83,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -105,7 +112,7 @@ const EditableRow = (param)=>{
                             children: "Cancel"
                         }, void 0, false, {
                             fileName: "[project]/src/components/EditableTable.tsx",
-                            lineNumber: 82,
+                            lineNumber: 86,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
@@ -117,7 +124,7 @@ const EditableRow = (param)=>{
                             children: "Edit"
                         }, void 0, false, {
                             fileName: "[project]/src/components/EditableTable.tsx",
-                            lineNumber: 88,
+                            lineNumber: 92,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -126,14 +133,14 @@ const EditableRow = (param)=>{
                             children: "Delete"
                         }, void 0, false, {
                             fileName: "[project]/src/components/EditableTable.tsx",
-                            lineNumber: 91,
+                            lineNumber: 95,
                             columnNumber: 14
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true)
             }, void 0, false, {
                 fileName: "[project]/src/components/EditableTable.tsx",
-                lineNumber: 76,
+                lineNumber: 80,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
@@ -153,7 +160,7 @@ const EditableTable = (param)=>{
             children: "No data available for this category."
         }, void 0, false, {
             fileName: "[project]/src/components/EditableTable.tsx",
-            lineNumber: 103,
+            lineNumber: 107,
             columnNumber: 12
         }, ("TURBOPACK compile-time value", void 0));
     }
@@ -171,25 +178,25 @@ const EditableTable = (param)=>{
                                     children: col.header
                                 }, col.key, false, {
                                     fileName: "[project]/src/components/EditableTable.tsx",
-                                    lineNumber: 112,
+                                    lineNumber: 116,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                 className: "p-2"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/EditableTable.tsx",
-                                lineNumber: 114,
+                                lineNumber: 118,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/EditableTable.tsx",
-                        lineNumber: 110,
+                        lineNumber: 114,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/src/components/EditableTable.tsx",
-                    lineNumber: 109,
+                    lineNumber: 113,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -200,23 +207,23 @@ const EditableTable = (param)=>{
                             onDelete: onDelete
                         }, row.id, false, {
                             fileName: "[project]/src/components/EditableTable.tsx",
-                            lineNumber: 119,
+                            lineNumber: 123,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0)))
                 }, void 0, false, {
                     fileName: "[project]/src/components/EditableTable.tsx",
-                    lineNumber: 117,
+                    lineNumber: 121,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/EditableTable.tsx",
-            lineNumber: 108,
+            lineNumber: 112,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/src/components/EditableTable.tsx",
-        lineNumber: 107,
+        lineNumber: 111,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
