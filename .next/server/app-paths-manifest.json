@@ -1,9 +1,9 @@
 {
+  "/api/submit-isolate/route": "app/api/submit-isolate/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/api/admin/metadata/route": "app/api/admin/metadata/route.js",
-  "/api/admin/isolates/route": "app/api/admin/isolates/route.js",
   "/api/admin/contact-log/route": "app/api/admin/contact-log/route.js",
-  "/api/labs/route": "app/api/labs/route.js",
+  "/api/admin/isolates/route": "app/api/admin/isolates/route.js",
   "/admin/page": "app/admin/page.js",
   "/map/page": "app/map/page.js"
 }
