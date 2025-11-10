@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent, useEffect, useMemo } from 'react';
+import { useState, FormEvent, useEffect, useMemo, useCallback } from 'react';
 
 const CORRECT_PASSWORD = 'fumi';
 
@@ -194,9 +194,9 @@ export default function IsolateForm() {
   };
 
   // Build genotype components from form data
-  const buildGenotypeComponents = (): GenotypeComponent[] => {
+  const buildGenotypeComponents = useCallback((): GenotypeComponent[] => {
     const components: GenotypeComponent[] = [];
-    
+
     // Add ku mutation
     if (formData.genotype.ku.present === 'Yes') {
       const kuType = formData.genotype.ku.kuType || 'ku';
@@ -211,7 +211,7 @@ export default function IsolateForm() {
         date: formData.genotype.ku.mutationDate || ''
       });
     }
-    
+
     // Add pyrG mutation
     if (formData.genotype.pyrG.present === 'Yes') {
       const isUV = formData.genotype.pyrG.wasUVMutagenesis === 'Yes';
@@ -225,7 +225,7 @@ export default function IsolateForm() {
         date: formData.genotype.pyrG.mutationDate || ''
       });
     }
-    
+
     // Add argB mutation
     if (formData.genotype.argB.present === 'Yes') {
       const isUV = formData.genotype.argB.wasUVMutagenesis === 'Yes';
@@ -239,7 +239,7 @@ export default function IsolateForm() {
         date: formData.genotype.argB.mutationDate || ''
       });
     }
-    
+
     // Add other genes
     formData.other_genes.forEach((gene, index) => {
       if (gene.geneName) {
@@ -255,12 +255,12 @@ export default function IsolateForm() {
         });
       }
     });
-    
+
     return components;
-  };
+  }, [formData.genotype, formData.other_genes]);
 
   // Build components whenever form data changes
-  const components = useMemo(() => buildGenotypeComponents(), [formData.genotype, formData.other_genes]);
+  const components = useMemo(() => buildGenotypeComponents(), [buildGenotypeComponents]);
   
   // Initialize order when components change
   useEffect(() => {
