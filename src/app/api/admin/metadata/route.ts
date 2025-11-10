@@ -78,14 +78,15 @@ export async function PUT(request: NextRequest) {
     // The SQL query now uses the newly fetched coordinates, not the old ones from the form.
     await sql`
       UPDATE lab_submissions
-      SET 
+      SET
         lab_name = ${updatedRow.lab_name as string}, institution = ${updatedRow.institution as string}, city = ${updatedRow.city as string},
         state = ${updatedRow.state as string}, country = ${updatedRow.country as string}, contact_name = ${updatedRow.contact_name as string},
         contact_email = ${updatedRow.contact_email as string}, research_use = ${updatedRow.research_use as string},
-        comments = ${updatedRow.comments as string}, 
+        comments = ${updatedRow.comments as string},
         latitude = ${coordinates?.lat || null},      -- Use the new latitude
         longitude = ${coordinates?.lng || null},     -- Use the new longitude
-        match_level = ${coordinates?.matchLevel || 'none'} -- Use the new match level
+        match_level = ${coordinates?.matchLevel || 'none'}, -- Use the new match level
+        map_visibility = ${(updatedRow.map_visibility as string) || 'full'} -- Update map visibility preference
       WHERE id = ${updatedRow.id};
     `;
     

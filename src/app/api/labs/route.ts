@@ -12,12 +12,23 @@ interface Lab {
   lng: number;
 }
 
-// Helper function to convert a database row (snake_case) to the frontend format (camelCase) 
+// Helper function to convert a database row (snake_case) to the frontend format (camelCase)
 function dbRowToLab(dbRow: Record<string, string | number | null>): Lab {
+  const mapVisibility = String(dbRow.map_visibility ?? 'full');
+  
+  // For institution_only visibility, use institution as the name and leave institution field empty
+  const labName = mapVisibility === 'institution_only'
+    ? String(dbRow.institution ?? '')
+    : String(dbRow.lab_name ?? '');
+  
+  const institution = mapVisibility === 'institution_only'
+    ? ''
+    : String(dbRow.institution ?? '');
+  
   return {
     id: String(dbRow.id ?? ''),
-    name: String(dbRow.lab_name ?? ''),
-    institution: String(dbRow.institution ?? ''),
+    name: labName,
+    institution: institution,
     location: `${String(dbRow.city ?? '')}${dbRow.state ? ', ' + String(dbRow.state) : ''}, ${String(dbRow.country ?? '')}`,
     country: String(dbRow.country ?? ''),
     lat: parseFloat(String(dbRow.latitude ?? '0')),
@@ -33,10 +44,13 @@ export async function GET() {
 
     // 2. Fetch all lab submissions from the database
     // We select only the columns needed for the public map to avoid sending extra data.
+    // Filter out labs that have opted out completely (map_visibility = 'hidden')
     const dbResult = await sql`
-      SELECT id, lab_name, institution, city, state, country, latitude, longitude 
-      FROM lab_submissions 
-      WHERE latitude IS NOT NULL AND longitude IS NOT NULL;
+      SELECT id, lab_name, institution, city, state, country, latitude, longitude, map_visibility
+      FROM lab_submissions
+      WHERE latitude IS NOT NULL
+        AND longitude IS NOT NULL
+        AND (map_visibility IS NULL OR map_visibility = 'full' OR map_visibility = 'institution_only');
     `;
 
     // 3. Transform the data into the format the frontend expects

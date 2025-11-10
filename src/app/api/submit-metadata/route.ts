@@ -8,6 +8,7 @@ import { getCoordinates } from '@/lib/geocoding';
 interface SubmissionData {
   labName: string; institution: string; city: string; state: string; country: string;
   contactName: string; contactEmail: string; researchUse: string; comments: string;
+  mapVisibility: 'full' | 'institution_only' | 'hidden';
 }
 //
 export async function POST(request: NextRequest) {
@@ -20,13 +21,14 @@ export async function POST(request: NextRequest) {
 
     await sql`
       INSERT INTO lab_submissions (
-        lab_name, institution, city, state, country, 
-        contact_name, contact_email, research_use, comments, 
-        latitude, longitude, match_level
+        lab_name, institution, city, state, country,
+        contact_name, contact_email, research_use, comments,
+        latitude, longitude, match_level, map_visibility
       ) VALUES (
         ${data.labName}, ${data.institution}, ${data.city}, ${data.state}, ${data.country},
         ${data.contactName}, ${data.contactEmail}, ${data.researchUse}, ${data.comments},
-        ${coordinates?.lat || null}, ${coordinates?.lng || null}, ${coordinates?.matchLevel || 'none'}
+        ${coordinates?.lat || null}, ${coordinates?.lng || null}, ${coordinates?.matchLevel || 'none'},
+        ${data.mapVisibility || 'full'}
       );
     `;
 

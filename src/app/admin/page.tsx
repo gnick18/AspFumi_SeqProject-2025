@@ -10,6 +10,7 @@ export interface LabMetadata {
   id: string; timestamp: string; lab_name: string; institution: string; city: string;
   state: string; country: string; contact_name: string; contact_email: string;
   research_use: string; comments: string; latitude: string; longitude: string; match_level: string;
+  map_visibility: string;
 }
 
 export interface IsolateData {
@@ -155,10 +156,12 @@ export default function AdminPage() {
 
   const labColumns: Column[] = [
     { key: 'lab_name', header: 'Lab Name' }, { key: 'institution', header: 'Institution' },
-    { key: 'city', header: 'City' }, 
-    { key: 'state', header: 'State/Region' }, 
+    { key: 'city', header: 'City' },
+    { key: 'state', header: 'State/Region' },
     { key: 'country', header: 'Country' },
-    { key: 'contact_email', header: 'Contact' }, { key: 'latitude', header: 'Lat' },
+    { key: 'contact_email', header: 'Contact' },
+    { key: 'map_visibility', header: 'Map Visibility', selectOptions: ['full', 'institution_only', 'hidden'] },
+    { key: 'latitude', header: 'Lat' },
     { key: 'longitude', header: 'Lng' }, { key: 'match_level', header: 'Match' },
   ];
   const isolateColumns: Column[] = [

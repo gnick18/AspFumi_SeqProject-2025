@@ -56,6 +56,27 @@ export default function FAQ() {
           We&apos;re here to help and ensure your participation in this initiative is as smooth as possible.
         </p>
       </div>
+
+      <div className="text-center mt-8">
+        <a
+          href="/join"
+          className="inline-block p-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+          style={{
+            backgroundColor: 'var(--light-yellow)',
+            border: '2px solid var(--soft-green)',
+          }}
+        >
+          <h4 className="text-lg font-semibold mb-2 flex items-center justify-center gap-2" style={{ color: 'var(--dark-green)' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+              <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
+            </svg>
+            Join Our Initiative
+          </h4>
+          <p className="text-sm" style={{ color: 'var(--forest-green)' }}>
+            Contact us to participate in this collaborative effort
+          </p>
+        </a>
+      </div>
     </div>
   );
 }

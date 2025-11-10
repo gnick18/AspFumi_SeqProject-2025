@@ -42,6 +42,7 @@ interface FormData {
   contactEmail: string;
   researchUse: string;
   comments: string;
+  mapVisibility: 'full' | 'institution_only' | 'hidden';
 }
 
 export default function MetadataForm() {
@@ -60,7 +61,8 @@ export default function MetadataForm() {
     contactName: '',
     contactEmail: '',
     researchUse: '',
-    comments: ''
+    comments: '',
+    mapVisibility: 'full'
   });
 
   const handlePasswordSubmit = (e: FormEvent) => {
@@ -99,7 +101,7 @@ export default function MetadataForm() {
         setSubmitMessage(result.message || 'Form submitted successfully!');
         setFormData({
           labName: '', institution: '', city: '', state: '', country: '',
-          contactName: '', contactEmail: '', researchUse: '', comments: ''
+          contactName: '', contactEmail: '', researchUse: '', comments: '', mapVisibility: 'full'
         });
       } else {
         setSubmitMessage('Error submitting form. Please try again or contact support.');
@@ -207,6 +209,64 @@ export default function MetadataForm() {
           <label htmlFor="comments" className="block text-sm font-medium mb-2">Additional Comments</label>
           <textarea id="comments" value={formData.comments} onChange={(e) => handleFormChange('comments', e.target.value)} rows={3} className="w-full p-3 border-2 rounded-lg focus:outline-none focus:border-citron" style={{ borderColor: 'var(--silver)' }} placeholder="Any additional information you&apos;d like to share" />
         </div>
+        
+        <div className="bg-blue-50 p-6 rounded-lg border-2" style={{ borderColor: 'var(--silver)' }}>
+          <label className="block text-sm font-medium mb-3">Map Visibility Preferences</label>
+          <p className="text-sm mb-4" style={{ color: 'var(--slate-gray)' }}>
+            Choose how your laboratory information appears on our public map. All data is still saved for research purposes.
+          </p>
+          <div className="space-y-3">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="radio"
+                name="mapVisibility"
+                value="full"
+                checked={formData.mapVisibility === 'full'}
+                onChange={(e) => handleFormChange('mapVisibility', e.target.value as FormData['mapVisibility'])}
+                className="mt-1"
+              />
+              <div>
+                <div className="font-medium text-sm">Show lab name and institution on map</div>
+                <div className="text-xs" style={{ color: 'var(--slate-gray)' }}>
+                  Your lab will be fully visible to the community
+                </div>
+              </div>
+            </label>
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="radio"
+                name="mapVisibility"
+                value="institution_only"
+                checked={formData.mapVisibility === 'institution_only'}
+                onChange={(e) => handleFormChange('mapVisibility', e.target.value as FormData['mapVisibility'])}
+                className="mt-1"
+              />
+              <div>
+                <div className="font-medium text-sm">Show institution only (anonymous lab)</div>
+                <div className="text-xs" style={{ color: 'var(--slate-gray)' }}>
+                  Your institution will appear on the map, but your lab name will remain private
+                </div>
+              </div>
+            </label>
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="radio"
+                name="mapVisibility"
+                value="hidden"
+                checked={formData.mapVisibility === 'hidden'}
+                onChange={(e) => handleFormChange('mapVisibility', e.target.value as FormData['mapVisibility'])}
+                className="mt-1"
+              />
+              <div>
+                <div className="font-medium text-sm">Do not include on map (complete opt-out)</div>
+                <div className="text-xs" style={{ color: 'var(--slate-gray)' }}>
+                  Your lab will not appear on the public map at all
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
         {submitMessage && (<div className={`p-4 rounded-lg ${submitMessage.includes('Error') ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>{submitMessage}</div>)}
         <div className="flex justify-end">
           <button type="submit" disabled={isSubmitting} className="px-8 py-3 rounded-lg font-medium btn-primary disabled:opacity-50">{isSubmitting ? 'Submitting...' : 'Submit Form'}</button>

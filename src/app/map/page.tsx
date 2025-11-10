@@ -70,7 +70,7 @@ function ParticipatingLabsList() {
         Current Participating Labs
       </h3>
       <p className="text-sm" style={{ color: 'var(--dark-grey)' }}>
-        via Sample Submission or Admin Support
+        via Sample Submission or Admin Support.
       </p>
       <br />
       
@@ -85,7 +85,9 @@ function ParticipatingLabsList() {
             <div key={lab.id} className="flex items-start gap-3">
               <div className="w-3 h-3 rounded-full mt-1.5 flex-shrink-0" style={{ backgroundColor: 'var(--soft-green)' }}></div>
               <div>
-                <p className="font-medium text-sm">{lab.name} at {lab.institution}</p>
+                <p className="font-medium text-sm">
+                  {lab.institution ? `${lab.name} at ${lab.institution}` : `Anonymous Lab at ${lab.name}`}
+                </p>
                 {lab.location && (
                   <p className="text-xs opacity-75">{lab.location}</p>
                 )}

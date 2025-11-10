@@ -117,7 +117,13 @@ const GlobalMap = () => {
     Object.values(groupedLabs).forEach((labGroup) => {
       const firstLab = labGroup[0];
       const position: [number, number] = [firstLab.lat, firstLab.lng];
-      const popupContent = `<div class="p-1 max-h-48 overflow-y-auto" style="font-family: Inter, sans-serif;">${labGroup.map(lab => `<div class="mb-3 border-l-2 border-green-300 pl-2"><h4 class="font-semibold text-sm mb-1" style="color: #333;">${lab.name}</h4><p class="text-xs opacity-75" style="color: #555;">${lab.institution || ''}${lab.institution && lab.country ? ', ' : ''}${lab.country}</p></div>`).join('')}</div>`;
+      const popupContent = `<div class="p-1 max-h-48 overflow-y-auto" style="font-family: Inter, sans-serif;">${labGroup.map(lab => {
+        // For anonymous labs (no institution), only show location info
+        const subtitle = lab.institution
+          ? `${lab.institution}${lab.country ? ', ' : ''}${lab.country}`
+          : lab.country;
+        return `<div class="mb-3 border-l-2 border-green-300 pl-2"><h4 class="font-semibold text-sm mb-1" style="color: #333;">${lab.name}</h4><p class="text-xs opacity-75" style="color: #555;">${subtitle}</p></div>`;
+      }).join('')}</div>`;
       L.marker(position, { icon: customIcon }).addTo(mapInstanceRef.current!).bindPopup(popupContent);
     });
 

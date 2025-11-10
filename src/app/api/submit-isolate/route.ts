@@ -9,6 +9,8 @@ interface IsolateSubmissionPayload {
   genotype_details_json: string; // Now expecting a string
   other_genes_json: string;      // Now expecting a string
   other_mutations: string;
+  uv_mutagenesis: string;
+  uv_exposure_details: string;
   strain_origin: string;
   strain_center_name: string;
   strain_center_location: string;
@@ -16,6 +18,8 @@ interface IsolateSubmissionPayload {
   sharing_lab_name: string;
   sharing_lab_institute: string;
   sharing_lab_location: string;
+  sharing_lab_date: string;
+  inhouse_generation_date: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -44,13 +48,17 @@ export async function POST(request: NextRequest) {
       INSERT INTO isolate_submissions (
         submitting_lab, strain_name, strain_origin,
         strain_center_name, strain_center_location, strain_center_date,
-        sharing_lab_name, sharing_lab_institute, sharing_lab_location,
-        genotype_details_json, other_genes_json, other_mutations
+        sharing_lab_name, sharing_lab_institute, sharing_lab_location, sharing_lab_date,
+        inhouse_generation_date,
+        genotype_details_json, other_genes_json, other_mutations,
+        uv_mutagenesis, uv_exposure_details
       ) VALUES (
         ${data.submitting_lab}, ${data.strain_name}, ${data.strain_origin},
         ${data.strain_center_name || null}, ${data.strain_center_location || null}, ${data.strain_center_date || null},
-        ${data.sharing_lab_name || null}, ${data.sharing_lab_institute || null}, ${data.sharing_lab_location || null},
-        ${data.genotype_details_json}, ${data.other_genes_json}, ${data.other_mutations || null}
+        ${data.sharing_lab_name || null}, ${data.sharing_lab_institute || null}, ${data.sharing_lab_location || null}, ${data.sharing_lab_date || null},
+        ${data.inhouse_generation_date || null},
+        ${data.genotype_details_json}, ${data.other_genes_json}, ${data.other_mutations || null},
+        ${data.uv_mutagenesis || null}, ${data.uv_exposure_details || null}
       );
     `;
 
