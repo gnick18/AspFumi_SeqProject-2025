@@ -482,7 +482,7 @@ export default function IsolateForm() {
             <li>- (hyphen) indicates a UV mutagenesis deletion (e.g., <em>pyrG-</em>)</li>
             <li>:: (double colon) indicates a replacement/complementation</li>
           </ul>
-          <p className="mt-3 text-xs italic">After filling out the form, you can drag and drop the genotype components below to reorder them according to your lab's convention.</p>
+          <p className="mt-3 text-xs italic">After filling out the form, you can drag and drop the genotype components below to reorder them according to your lab&apos;s convention.</p>
         </div>
       </div>
 
