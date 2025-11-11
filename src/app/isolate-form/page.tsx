@@ -113,18 +113,21 @@ const MutationRow = ({
               </select>
             </div>
             {data.hasMarkerReplacement === 'Yes' && (
-              <div className="grid grid-cols-3 gap-4 items-center relative">
+              <div className="grid grid-cols-3 gap-4 items-center">
                 <label className="text-sm italic">Marker gene name:</label>
+                <input type="text" value={data.markerGene} onChange={(e) => handleFormChange(`genotype.${mutationKey}.markerGene`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
+                {/* Tooltip commented out - issue appears to be fixed
                 <div className="col-span-2 relative">
                   <input type="text" value={data.markerGene} onChange={(e) => handleFormChange(`genotype.${mutationKey}.markerGene`, e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
                   <div className="marker-gene-tooltip">
                     <div className="tooltip-arrow"></div>
                     <div className="tooltip-content">
                       <p className="text-xs font-semibold mb-1">⚠️ Known Issue</p>
-                      <p className="text-xs">This field loses focus after each letter. Please click back in the box to continue typing. We&apos;re working on a fix!</p>
+                      <p className="text-xs">This field loses focus after each letter. Please click back in the box to continue typing. We're working on a fix!</p>
                     </div>
                   </div>
                 </div>
+                */}
               </div>
             )}
             <div className="grid grid-cols-3 gap-4 items-center">
@@ -638,18 +641,21 @@ export default function IsolateForm() {
                     </select>
                   </div>
                   {gene.hasMarkerReplacement === 'Yes' && (
-                    <div className="grid grid-cols-3 gap-4 items-center relative">
+                    <div className="grid grid-cols-3 gap-4 items-center">
                       <label className="text-sm italic">Marker gene name:</label>
+                      <input type="text" value={gene.markerGene} onChange={(e) => handleFormChange(`other_genes.${index}.markerGene`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
+                      {/* Tooltip commented out - issue appears to be fixed
                       <div className="col-span-2 relative">
                         <input type="text" value={gene.markerGene} onChange={(e) => handleFormChange(`other_genes.${index}.markerGene`, e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
                         <div className="marker-gene-tooltip">
                           <div className="tooltip-arrow"></div>
                           <div className="tooltip-content">
                             <p className="text-xs font-semibold mb-1">⚠️ Known Issue</p>
-                            <p className="text-xs">This field loses focus after each letter. Please click back in the box to continue typing. We&apos;re working on a fix!</p>
+                            <p className="text-xs">This field loses focus after each letter. Please click back in the box to continue typing. We're working on a fix!</p>
                           </div>
                         </div>
                       </div>
+                      */}
                     </div>
                   )}
                   <div className="grid grid-cols-3 gap-4 items-center">
