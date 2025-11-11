@@ -2,7 +2,8 @@
 
 import { useState, FormEvent, useEffect, useMemo, useCallback } from 'react';
 
-const CORRECT_PASSWORD = 'fumi';
+const SESSION_CHECK_URL = '/api/isolate-login';
+const LOGIN_URL = '/api/isolate-login';
 
 // --- STATE INTERFACES ---
 
@@ -187,6 +188,20 @@ export default function IsolateForm() {
   //Adding in the hook
   useEffect(() => {
     setHasMounted(true);
+    
+    // Check for existing session
+    const checkSession = async () => {
+      try {
+        const response = await fetch(SESSION_CHECK_URL);
+        if (response.ok) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Session check failed:', error);
+      }
+    };
+    
+    checkSession();
   }, []); // The empty array [] ensures this runs only once on the client
 
   useEffect(() => {
@@ -233,13 +248,26 @@ export default function IsolateForm() {
     }
   }, [formData.genotype.ku.wasUVMutagenesis, formData.genotype.pyrG.wasUVMutagenesis, formData.genotype.argB.wasUVMutagenesis, formData.other_genes, formData.uv_mutagenesis]);
 
-  const handlePasswordSubmit = (e: FormEvent) => {
+  const handlePasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (passwordInput === CORRECT_PASSWORD) {
-      setIsAuthenticated(true);
-      setPasswordError('');
-    } else {
-      setPasswordError('Incorrect password. Please contact the organizing team for the correct password.');
+    
+    try {
+      const response = await fetch(LOGIN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: passwordInput }),
+      });
+
+      if (response.ok) {
+        setIsAuthenticated(true);
+        setPasswordError('');
+        setPasswordInput('');
+      } else {
+        setPasswordError('Incorrect password. Please contact the organizing team for the correct password.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setPasswordError('Login failed. Please try again.');
     }
   };
   

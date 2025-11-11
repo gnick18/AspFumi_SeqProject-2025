@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 // FIX: The 'next/link' import is removed to prevent the build error.
 // import Link from 'next/link';
 
-const CORRECT_PASSWORD = 'af293';
+const SESSION_CHECK_URL = '/api/metadata-login';
+const LOGIN_URL = '/api/metadata-login';
 
 // To keep the component clean, the list of countries is defined here.
 const countryList = [
@@ -65,13 +66,42 @@ export default function MetadataForm() {
     mapVisibility: 'full'
   });
 
-  const handlePasswordSubmit = (e: FormEvent) => {
+  useEffect(() => {
+    // Check for existing session
+    const checkSession = async () => {
+      try {
+        const response = await fetch(SESSION_CHECK_URL);
+        if (response.ok) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Session check failed:', error);
+      }
+    };
+    
+    checkSession();
+  }, []);
+
+  const handlePasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (passwordInput === CORRECT_PASSWORD) {
-      setIsAuthenticated(true);
-      setPasswordError('');
-    } else {
-      setPasswordError('Incorrect password. Please contact the organizing team for the correct password.');
+    
+    try {
+      const response = await fetch(LOGIN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: passwordInput }),
+      });
+
+      if (response.ok) {
+        setIsAuthenticated(true);
+        setPasswordError('');
+        setPasswordInput('');
+      } else {
+        setPasswordError('Incorrect password. Please contact the organizing team for the correct password.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setPasswordError('Login failed. Please try again.');
     }
   };
 
