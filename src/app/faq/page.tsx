@@ -13,7 +13,11 @@ export default function FAQ() {
     },
     {
       question: "What does my research team get out of this collaboration?",
-      answer: "We will sequence your lab's isolate of Af293 or CEA10 for free and will provide your group with the resulting genome assembly and annotation files in real-time. In addition, the principal investigator from each collaborating lab will be offered co-authorship on the publication summarizing our findings."
+      answer: "We will sequence your lab's isolate of Af293 or CEA10 for free and will provide your group with the resulting genome assembly and annotation files in as they become available. In addition, the principal investigator from each collaborating lab will be offered co-authorship on the larger community publication."
+    },
+    {
+      question:"Am I allowed to use my isolate's sequenced genome in a publication?",
+      answer: "Yes! We will share the sequenced and annotated genome with each lab that sent us a sample, and you are welcome to use and publish with that data immediately. The Barber and Gluck-Thaler labs will have access to the full dataset for the main community paper, with the intention of making all genomes public after this publication is complete."
     },
     {
       question: "Our lab would like to participate but have already sequenced our isolate of Af293 or CEA10 in-house in the past?",

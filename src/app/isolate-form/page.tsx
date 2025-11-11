@@ -139,15 +139,15 @@ export default function IsolateForm() {
     }
   }, [isAuthenticated]);
 
-  // Auto-set UV mutagenesis to Yes if any mutation was done via UV
+  // Auto-set UV mutagenesis to Yes if any mutation was made via point mutation methods
   useEffect(() => {
-    const hasAnyUVMutation =
+    const hasAnyPointMutation =
       formData.genotype.ku.wasUVMutagenesis === 'Yes' ||
       formData.genotype.pyrG.wasUVMutagenesis === 'Yes' ||
       formData.genotype.argB.wasUVMutagenesis === 'Yes' ||
       formData.other_genes.some(gene => gene.wasUVMutagenesis === 'Yes');
     
-    if (hasAnyUVMutation && formData.uv_mutagenesis !== 'Yes') {
+    if (hasAnyPointMutation && formData.uv_mutagenesis !== 'Yes') {
       setFormData(prev => ({ ...prev, uv_mutagenesis: 'Yes' }));
     }
   }, [formData.genotype.ku.wasUVMutagenesis, formData.genotype.pyrG.wasUVMutagenesis, formData.genotype.argB.wasUVMutagenesis, formData.other_genes, formData.uv_mutagenesis]);
@@ -200,10 +200,10 @@ export default function IsolateForm() {
     // Add ku mutation
     if (formData.genotype.ku.present === 'Yes') {
       const kuType = formData.genotype.ku.kuType || 'ku';
-      const isUV = formData.genotype.ku.wasUVMutagenesis === 'Yes';
-      let text = isUV ? `${kuType}-` : `Δ${kuType}`;
+      const isPointMutation = formData.genotype.ku.wasUVMutagenesis === 'Yes';
+      let text = isPointMutation ? `${kuType}-` : `Δ${kuType}`;
       if (formData.genotype.ku.hasMarkerReplacement === 'Yes' && formData.genotype.ku.markerGene) {
-        text = isUV ? `${kuType}-::${formData.genotype.ku.markerGene}` : `Δ${kuType}::${formData.genotype.ku.markerGene}`;
+        text = isPointMutation ? `${kuType}-::${formData.genotype.ku.markerGene}` : `Δ${kuType}::${formData.genotype.ku.markerGene}`;
       }
       components.push({
         id: 'ku',
@@ -214,10 +214,10 @@ export default function IsolateForm() {
 
     // Add pyrG mutation
     if (formData.genotype.pyrG.present === 'Yes') {
-      const isUV = formData.genotype.pyrG.wasUVMutagenesis === 'Yes';
-      let text = isUV ? 'pyrG-' : 'ΔpyrG';
+      const isPointMutation = formData.genotype.pyrG.wasUVMutagenesis === 'Yes';
+      let text = isPointMutation ? 'pyrG-' : 'ΔpyrG';
       if (formData.genotype.pyrG.hasMarkerReplacement === 'Yes' && formData.genotype.pyrG.markerGene) {
-        text = isUV ? `pyrG-::${formData.genotype.pyrG.markerGene}` : `ΔpyrG::${formData.genotype.pyrG.markerGene}`;
+        text = isPointMutation ? `pyrG-::${formData.genotype.pyrG.markerGene}` : `ΔpyrG::${formData.genotype.pyrG.markerGene}`;
       }
       components.push({
         id: 'pyrG',
@@ -228,10 +228,10 @@ export default function IsolateForm() {
 
     // Add argB mutation
     if (formData.genotype.argB.present === 'Yes') {
-      const isUV = formData.genotype.argB.wasUVMutagenesis === 'Yes';
-      let text = isUV ? 'argB-' : 'ΔargB';
+      const isPointMutation = formData.genotype.argB.wasUVMutagenesis === 'Yes';
+      let text = isPointMutation ? 'argB-' : 'ΔargB';
       if (formData.genotype.argB.hasMarkerReplacement === 'Yes' && formData.genotype.argB.markerGene) {
-        text = isUV ? `argB-::${formData.genotype.argB.markerGene}` : `ΔargB::${formData.genotype.argB.markerGene}`;
+        text = isPointMutation ? `argB-::${formData.genotype.argB.markerGene}` : `ΔargB::${formData.genotype.argB.markerGene}`;
       }
       components.push({
         id: 'argB',
@@ -243,10 +243,10 @@ export default function IsolateForm() {
     // Add other genes
     formData.other_genes.forEach((gene, index) => {
       if (gene.geneName) {
-        const isUV = gene.wasUVMutagenesis === 'Yes';
-        let text = isUV ? `${gene.geneName}-` : `Δ${gene.geneName}`;
+        const isPointMutation = gene.wasUVMutagenesis === 'Yes';
+        let text = isPointMutation ? `${gene.geneName}-` : `Δ${gene.geneName}`;
         if (gene.hasMarkerReplacement === 'Yes' && gene.markerGene) {
-          text = isUV ? `${gene.geneName}-::${gene.markerGene}` : `Δ${gene.geneName}::${gene.markerGene}`;
+          text = isPointMutation ? `${gene.geneName}-::${gene.markerGene}` : `Δ${gene.geneName}::${gene.markerGene}`;
         }
         components.push({
           id: `other_${index}`,
@@ -429,7 +429,7 @@ export default function IsolateForm() {
                   </div>
                 )}
                 <div className="grid grid-cols-3 gap-4 items-center">
-                  <label className="text-sm italic">Was UV mutagenesis used to generate this deletion?</label>
+                  <label className="text-sm italic">Was this mutation made via point mutation (5-FOA, chemical mutagen, UV, etc.)?</label>
                   <select value={data.wasUVMutagenesis} onChange={(e) => handleFormChange(`genotype.${mutationKey}.wasUVMutagenesis`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
                     <option value="">Select...</option>
                     <option value="Yes">Yes</option>
@@ -479,7 +479,7 @@ export default function IsolateForm() {
           <ul className="list-disc list-inside ml-4 space-y-1">
             <li>Genes are written in <em>italicized lowercase</em> (e.g., <em>ku70</em>, <em>pyrG</em>)</li>
             <li>Δ (delta) indicates a targeted deletion</li>
-            <li>- (hyphen) indicates a UV mutagenesis deletion (e.g., <em>pyrG-</em>)</li>
+            <li>- (hyphen) indicates a point mutation deletion (5-FOA, chemical mutagen, UV, etc.) (e.g., <em>pyrG-</em>)</li>
             <li>:: (double colon) indicates a replacement/complementation</li>
           </ul>
           <p className="mt-3 text-xs italic">After filling out the form, you can drag and drop the genotype components below to reorder them according to your lab&apos;s convention.</p>
@@ -553,7 +553,7 @@ export default function IsolateForm() {
           {/* UV Mutagenesis Section */}
           <div className="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200 mb-4">
             <div className="grid md:grid-cols-3 gap-4 items-start">
-              <label className="font-medium text-sm pt-2">Has UV mutagenesis ever been performed on this strain?</label>
+              <label className="font-medium text-sm pt-2">Has UV or chemical mutagenesis ever been performed on this strain?</label>
               <div className="md:col-span-2 space-y-3">
                 <select value={formData.uv_mutagenesis} onChange={(e) => handleFormChange('uv_mutagenesis', e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
                   <option value="">Select...</option>
@@ -562,8 +562,8 @@ export default function IsolateForm() {
                 </select>
                 {formData.uv_mutagenesis === 'Yes' && (
                   <div>
-                    <label className="block text-sm italic mb-2">UV exposure details (length of time, amount of UV):</label>
-                    <textarea value={formData.uv_exposure_details} onChange={(e) => handleFormChange('uv_exposure_details', e.target.value)} rows={2} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., 30 seconds at 254nm, 100 J/m²" />
+                    <label className="block text-sm italic mb-2">UV exposure details (length of time, amount of UV) or chemical mutagen details:</label>
+                    <textarea value={formData.uv_exposure_details} onChange={(e) => handleFormChange('uv_exposure_details', e.target.value)} rows={2} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., 30 seconds at 254nm, 100 J/m²." />
                   </div>
                 )}
               </div>
@@ -587,7 +587,7 @@ export default function IsolateForm() {
                 <label className="font-medium text-sm pt-2">Details for {gene.geneName || 'this gene'}:</label>
                 <div className="md:col-span-2 space-y-3">
                   <div className="grid grid-cols-3 gap-4 items-center">
-                    <label className="text-sm italic">Was UV mutagenesis used to generate this deletion?</label>
+                    <label className="text-sm italic">Was this mutation made via point mutation (5-FOA, chemical mutagen, UV, etc.)?</label>
                     <select value={gene.wasUVMutagenesis} onChange={(e) => handleFormChange(`other_genes.${index}.wasUVMutagenesis`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
                       <option value="">Select...</option>
                       <option value="Yes">Yes</option>
