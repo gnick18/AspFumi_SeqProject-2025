@@ -60,6 +60,84 @@ interface GenotypeComponent {
 }
 
 
+// --- MUTATION ROW COMPONENT (moved outside to prevent re-creation) ---
+const MutationRow = ({
+  mutationName,
+  mutationKey,
+  isKu = false,
+  formData,
+  handleFormChange
+}: {
+  mutationName: React.ReactNode;
+  mutationKey: keyof GenotypeInfo;
+  isKu?: boolean;
+  formData: IsolateFormData;
+  handleFormChange: (field: string, value: string) => void;
+}) => {
+  const data = formData.genotype[mutationKey] as KuMutationInfo;
+  return (
+    <div className="grid md:grid-cols-3 gap-4 items-start py-2 border-b">
+      <label className="font-medium text-sm pt-2">{mutationName}</label>
+      <div className="md:col-span-2 space-y-3">
+        <select value={data.present} onChange={(e) => handleFormChange(`genotype.${mutationKey}.present`, e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
+          <option value="">Select...</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+        {data.present === 'Yes' && (
+          <div className="space-y-3 pl-4 border-l-2">
+            {isKu && (
+              <div className="grid grid-cols-3 gap-4 items-center">
+                <label className="text-sm italic">Type:</label>
+                <select value={data.kuType} onChange={(e) => handleFormChange(`genotype.${mutationKey}.kuType`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
+                  <option value="">Select Ku Type...</option>
+                  <option value="ku70">ku70</option>
+                  <option value="ku80">ku80</option>
+                </select>
+              </div>
+            )}
+            <div className="grid grid-cols-3 gap-4 items-center">
+              <label className="text-sm italic">Was this mutation made via point mutation (5-FOA, chemical mutagen, UV, etc.)?</label>
+              <select value={data.wasUVMutagenesis} onChange={(e) => handleFormChange(`genotype.${mutationKey}.wasUVMutagenesis`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
+                <option value="">Select...</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div className="grid grid-cols-3 gap-4 items-center">
+              <label className="text-sm italic">Was this gene replaced with a marker gene?</label>
+              <select value={data.hasMarkerReplacement} onChange={(e) => handleFormChange(`genotype.${mutationKey}.hasMarkerReplacement`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
+                <option value="">Select...</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            {data.hasMarkerReplacement === 'Yes' && (
+              <div className="grid grid-cols-3 gap-4 items-center relative">
+                <label className="text-sm italic">Marker gene name:</label>
+                <div className="col-span-2 relative">
+                  <input type="text" value={data.markerGene} onChange={(e) => handleFormChange(`genotype.${mutationKey}.markerGene`, e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
+                  <div className="marker-gene-tooltip">
+                    <div className="tooltip-arrow"></div>
+                    <div className="tooltip-content">
+                      <p className="text-xs font-semibold mb-1">⚠️ Known Issue</p>
+                      <p className="text-xs">This field loses focus after each letter. Please click back in the box to continue typing. We&apos;re working on a fix!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className="grid grid-cols-3 gap-4 items-center">
+              <label className="text-sm italic">Mutation Date (Optional):</label>
+              <input type="date" value={data.mutationDate} onChange={(e) => handleFormChange(`genotype.${mutationKey}.mutationDate`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // --- COMPONENT ---
 
 export default function IsolateForm() {
@@ -173,23 +251,36 @@ export default function IsolateForm() {
     }
 
     setFormData(prev => {
-        const newState = JSON.parse(JSON.stringify(prev));
         if (field.startsWith('genotype.')) {
           const [, mutation, key] = field.split('.');
-          const mutationState = newState.genotype[mutation as keyof GenotypeInfo];
-          // Use Record to satisfy the index signature requirement for dynamic keys
-          (mutationState as Record<string, string>)[key] = value;
+          return {
+            ...prev,
+            genotype: {
+              ...prev.genotype,
+              [mutation]: {
+                ...prev.genotype[mutation as keyof GenotypeInfo],
+                [key]: value
+              }
+            }
+          };
         } else if (field.startsWith('other_genes.')) {
           const [, indexStr, key] = field.split('.');
           const index = parseInt(indexStr, 10);
-          const geneState = newState.other_genes[index];
-          // Use Record here as well
-          (geneState as Record<string, string>)[key] = value;
+          const newOtherGenes = [...prev.other_genes];
+          newOtherGenes[index] = {
+            ...newOtherGenes[index],
+            [key]: value
+          };
+          return {
+            ...prev,
+            other_genes: newOtherGenes
+          };
         } else {
-          // And here for top-level properties
-          (newState as Record<string, unknown>)[field] = value;
+          return {
+            ...prev,
+            [field]: value
+          };
         }
-        return newState;
     });
   };
 
@@ -405,62 +496,6 @@ export default function IsolateForm() {
     );
   }
 
-  const MutationRow = ({ mutationName, mutationKey, isKu = false }: { mutationName: React.ReactNode, mutationKey: keyof GenotypeInfo, isKu?: boolean}) => {
-    const data = formData.genotype[mutationKey] as KuMutationInfo;
-    return (
-        <div className="grid md:grid-cols-3 gap-4 items-start py-2 border-b">
-          <label className="font-medium text-sm pt-2">{mutationName}</label>
-          <div className="md:col-span-2 space-y-3">
-            <select value={data.present} onChange={(e) => handleFormChange(`genotype.${mutationKey}.present`, e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
-              <option value="">Select...</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-            {data.present === 'Yes' && (
-              <div className="space-y-3 pl-4 border-l-2">
-                {isKu && (
-                  <div className="grid grid-cols-3 gap-4 items-center">
-                    <label className="text-sm italic">Type:</label>
-                    <select value={data.kuType} onChange={(e) => handleFormChange(`genotype.${mutationKey}.kuType`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
-                      <option value="">Select Ku Type...</option>
-                      <option value="ku70">ku70</option>
-                      <option value="ku80">ku80</option>
-                    </select>
-                  </div>
-                )}
-                <div className="grid grid-cols-3 gap-4 items-center">
-                  <label className="text-sm italic">Was this mutation made via point mutation (5-FOA, chemical mutagen, UV, etc.)?</label>
-                  <select value={data.wasUVMutagenesis} onChange={(e) => handleFormChange(`genotype.${mutationKey}.wasUVMutagenesis`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
-                    <option value="">Select...</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                </div>
-                <div className="grid grid-cols-3 gap-4 items-center">
-                  <label className="text-sm italic">Was this gene replaced with a marker gene?</label>
-                  <select value={data.hasMarkerReplacement} onChange={(e) => handleFormChange(`genotype.${mutationKey}.hasMarkerReplacement`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
-                    <option value="">Select...</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                </div>
-                {data.hasMarkerReplacement === 'Yes' && (
-                  <div className="grid grid-cols-3 gap-4 items-center">
-                    <label className="text-sm italic">Marker gene name:</label>
-                    <input type="text" value={data.markerGene} onChange={(e) => handleFormChange(`genotype.${mutationKey}.markerGene`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
-                  </div>
-                )}
-                <div className="grid grid-cols-3 gap-4 items-center">
-                  <label className="text-sm italic">Mutation Date (Optional):</label>
-                  <input type="date" value={data.mutationDate} onChange={(e) => handleFormChange(`genotype.${mutationKey}.mutationDate`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-    );
-  }
-
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -553,7 +588,7 @@ export default function IsolateForm() {
           {/* UV Mutagenesis Section */}
           <div className="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200 mb-4">
             <div className="grid md:grid-cols-3 gap-4 items-start">
-              <label className="font-medium text-sm pt-2">Has UV or chemical mutagenesis ever been performed on this strain?</label>
+              <label className="font-medium text-sm pt-2">Has UV mutagenesis ever been performed on this strain?</label>
               <div className="md:col-span-2 space-y-3">
                 <select value={formData.uv_mutagenesis} onChange={(e) => handleFormChange('uv_mutagenesis', e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
                   <option value="">Select...</option>
@@ -562,17 +597,17 @@ export default function IsolateForm() {
                 </select>
                 {formData.uv_mutagenesis === 'Yes' && (
                   <div>
-                    <label className="block text-sm italic mb-2">UV exposure details (length of time, amount of UV) or chemical mutagen details:</label>
-                    <textarea value={formData.uv_exposure_details} onChange={(e) => handleFormChange('uv_exposure_details', e.target.value)} rows={2} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., 30 seconds at 254nm, 100 J/m²." />
+                    <label className="block text-sm italic mb-2">UV exposure details (length of time, amount of UV):</label>
+                    <textarea value={formData.uv_exposure_details} onChange={(e) => handleFormChange('uv_exposure_details', e.target.value)} rows={2} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., 30 seconds at 254nm, 100 J/m²" />
                   </div>
                 )}
               </div>
             </div>
           </div>
 
-          <MutationRow mutationName={<>Δ<em>ku</em> Mutation?</>} mutationKey="ku" isKu />
-          <MutationRow mutationName={<>Δ<em>pyrG</em> Mutation?</>} mutationKey="pyrG" />
-          <MutationRow mutationName={<>Δ<em>argB</em> Mutation?</>} mutationKey="argB" />
+          <MutationRow mutationName={<>Δ<em>ku</em> Mutation?</>} mutationKey="ku" isKu formData={formData} handleFormChange={handleFormChange} />
+          <MutationRow mutationName={<>Δ<em>pyrG</em> Mutation?</>} mutationKey="pyrG" formData={formData} handleFormChange={handleFormChange} />
+          <MutationRow mutationName={<>Δ<em>argB</em> Mutation?</>} mutationKey="argB" formData={formData} handleFormChange={handleFormChange} />
         </div>
         <div className="space-y-2 p-4 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
           <h3 className="text-lg font-semibold bg-gray-700 text-white p-2 rounded-md">Add Additional Gene Mutation Information</h3>
@@ -603,9 +638,18 @@ export default function IsolateForm() {
                     </select>
                   </div>
                   {gene.hasMarkerReplacement === 'Yes' && (
-                    <div className="grid grid-cols-3 gap-4 items-center">
+                    <div className="grid grid-cols-3 gap-4 items-center relative">
                       <label className="text-sm italic">Marker gene name:</label>
-                      <input type="text" value={gene.markerGene} onChange={(e) => handleFormChange(`other_genes.${index}.markerGene`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
+                      <div className="col-span-2 relative">
+                        <input type="text" value={gene.markerGene} onChange={(e) => handleFormChange(`other_genes.${index}.markerGene`, e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
+                        <div className="marker-gene-tooltip">
+                          <div className="tooltip-arrow"></div>
+                          <div className="tooltip-content">
+                            <p className="text-xs font-semibold mb-1">⚠️ Known Issue</p>
+                            <p className="text-xs">This field loses focus after each letter. Please click back in the box to continue typing. We&apos;re working on a fix!</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
                   <div className="grid grid-cols-3 gap-4 items-center">
