@@ -196,14 +196,14 @@ export default function AdminPage() {
       } catch(e) { console.error(e); alert('Failed to add new row.'); }
   };
 
-  const handleDownloadTSV = (data: any[], columns: Column[], filename: string) => {
+  const handleDownloadTSV = (data: LabMetadata[] | IsolateData[] | ContactLogEntry[], columns: Column[], filename: string) => {
     // Extract headers
     const headers = columns.map(col => col.header);
     
     // Extract data rows
     const rows = data.map(row => {
       return columns.map(col => {
-        const value = row[col.key] || '';
+        const value = row[col.key as keyof typeof row] || '';
         // Handle JSON fields by parsing and formatting nicely
         if (typeof value === 'string' && (value.startsWith('{') || value.startsWith('['))) {
           try {
