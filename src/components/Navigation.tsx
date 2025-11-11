@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import GoogleTranslate from './GoogleTranslate';
 
@@ -19,15 +20,31 @@ const Navigation = () => {
   return (
     <nav className="nav-container">
       <div className="container mx-auto px-4 py-6">
-        <div className="flex justify-between items-start mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-white flex-1 text-center">
+        {/* Header with logo, title, and translate button */}
+        <div className="flex items-center justify-center mb-6 relative">
+          {/* Logo on the left */}
+          <div className="absolute left-0 hidden md:block">
+            <Image
+              src="/logo.png"
+              alt="Aspergillus fumigatus Logo"
+              width={100}
+              height={100}
+              className="logo-image"
+            />
+          </div>
+          
+          {/* Centered title */}
+          <h1 className="text-2xl md:text-3xl font-bold text-white text-center px-4">
             <em>Aspergillus fumigatus</em> Community Sequencing Initiative
           </h1>
-          <div className="ml-4">
+          
+          {/* Translate button on the right */}
+          <div className="absolute right-0">
             <GoogleTranslate />
           </div>
         </div>
 
+        {/* Navigation links */}
         <div className="flex flex-wrap justify-center gap-4 md:gap-8">
           {navItems.map((item) => (
             <Link

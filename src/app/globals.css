@@ -111,31 +111,48 @@ body {
   border: none !important;
 }
 
+/* Logo Styling */
+.logo-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: var(--light-yellow);
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.logo-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
 /* Google Translate Widget Styling */
 .google-translate-wrapper {
   display: inline-block;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  padding: 14px 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+  background: var(--light-yellow);
+  padding: 8px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   position: relative;
+  border: 2px solid rgba(0, 0, 0, 0.1);
 }
 
 .google-translate-wrapper:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 0, 0, 0.2);
 }
 
 /* Add instructional text before the dropdown */
 .google-translate-wrapper::before {
-  content: "🌐 Click to see languages";
-  font-size: 18px;
+  content: "🌐 Translate";
+  font-size: 14px;
   font-weight: 600;
-  color: var(--pure-white);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  color: var(--text-black);
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-family: var(--font-geist-sans), Arial, sans-serif;
 }
 
@@ -154,47 +171,47 @@ body {
 }
 
 .goog-te-gadget-simple {
-  background-color: rgba(255, 255, 255, 0.25) !important;
-  border: 2px solid rgba(255, 255, 255, 0.4) !important;
-  border-radius: 8px !important;
-  padding: 10px 16px !important;
-  font-size: 16px !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border: 2px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 6px !important;
+  padding: 6px 12px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   cursor: pointer !important;
   transition: all 0.3s ease !important;
-  min-width: 200px !important;
-  backdrop-filter: blur(10px);
+  min-width: 140px !important;
+  backdrop-filter: blur(5px);
 }
 
 .goog-te-gadget-simple:hover {
-  background-color: rgba(255, 255, 255, 0.35) !important;
-  border-color: rgba(255, 255, 255, 0.6) !important;
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 .goog-te-gadget-simple .goog-te-menu-value {
-  color: var(--pure-white) !important;
+  color: var(--text-black) !important;
   font-family: var(--font-geist-sans), Arial, sans-serif !important;
-  font-size: 16px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .goog-te-gadget-simple .goog-te-menu-value span {
-  color: var(--pure-white) !important;
+  color: var(--text-black) !important;
   font-family: var(--font-geist-sans), Arial, sans-serif !important;
   font-weight: 600 !important;
 }
 
 .goog-te-gadget-simple .goog-te-menu-value span:first-child {
   display: inline !important;
-  font-size: 16px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
 }
 
 /* Style the dropdown arrow */
 .goog-te-gadget-simple .goog-te-menu-value span:last-child {
-  font-size: 14px !important;
-  margin-left: 8px;
+  font-size: 12px !important;
+  margin-left: 6px;
+  color: var(--text-black) !important;
 }
 
 /* Style the dropdown menu */
@@ -391,25 +408,34 @@ body {
 
 /* Responsive adjustments for translation widget */
 @media (max-width: 768px) {
+  .logo-image {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
   .google-translate-wrapper {
-    margin-top: 8px;
-    padding: 10px 16px;
+    padding: 6px 12px;
+    position: static !important;
+    margin-top: 12px;
   }
   
   .google-translate-wrapper::before {
-    font-size: 16px;
+    font-size: 12px;
+    margin-bottom: 4px;
   }
   
   .goog-te-gadget-simple {
-    font-size: 14px !important;
+    font-size: 12px !important;
+    min-width: 120px !important;
+    padding: 5px 10px !important;
   }
   
   .goog-te-gadget-simple .goog-te-menu-value {
-    font-size: 14px !important;
+    font-size: 12px !important;
   }
   
   .goog-te-gadget-simple .goog-te-menu-value span:first-child {
-    font-size: 14px !important;
+    font-size: 12px !important;
   }
   
   .translation-warning-modal {
