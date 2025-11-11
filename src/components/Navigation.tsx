@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import GoogleTranslate from './GoogleTranslate';
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -18,9 +19,14 @@ const Navigation = () => {
   return (
     <nav className="nav-container">
       <div className="container mx-auto px-4 py-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-center mb-6 text-white">
-          <em>Aspergillus fumigatus</em> Community Sequencing Initiative
-        </h1>
+        <div className="flex justify-between items-start mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-white flex-1 text-center">
+            <em>Aspergillus fumigatus</em> Community Sequencing Initiative
+          </h1>
+          <div className="ml-4">
+            <GoogleTranslate />
+          </div>
+        </div>
 
         <div className="flex flex-wrap justify-center gap-4 md:gap-8">
           {navItems.map((item) => (
