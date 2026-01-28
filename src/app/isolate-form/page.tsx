@@ -155,6 +155,13 @@ export default function IsolateForm() {
   const [loadingLabs, setLoadingLabs] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
 
+  // New state for editing existing isolates
+  const [existingIsolates, setExistingIsolates] = useState<any[]>([]);
+  const [loadingExistingIsolates, setLoadingExistingIsolates] = useState(false);
+  const [selectedStrainId, setSelectedStrainId] = useState<string>('new');
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [showUpdateConfirmation, setShowUpdateConfirmation] = useState(false);
+
   const [formData, setFormData] = useState<IsolateFormData>({
     submitting_lab: '',
     strain_name: '',
@@ -234,6 +241,41 @@ export default function IsolateForm() {
         fetchLabNames();
     }
   }, [isAuthenticated]);
+
+  // Fetch existing isolates when lab is selected
+  useEffect(() => {
+    const fetchExistingIsolates = async () => {
+      if (!formData.submitting_lab) {
+        setExistingIsolates([]);
+        setSelectedStrainId('new');
+        setIsEditMode(false);
+        return;
+      }
+      
+      try {
+        setLoadingExistingIsolates(true);
+        const encodedLabName = encodeURIComponent(formData.submitting_lab);
+        const response = await fetch(`/api/labs/${encodedLabName}/isolates`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setExistingIsolates(data.isolates || []);
+        } else {
+          console.error('Failed to fetch existing isolates');
+          setExistingIsolates([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch existing isolates:', error);
+        setExistingIsolates([]);
+      } finally {
+        setLoadingExistingIsolates(false);
+      }
+    };
+    
+    if (isAuthenticated) {
+      fetchExistingIsolates();
+    }
+  }, [formData.submitting_lab, isAuthenticated]);
 
   // Auto-set UV mutagenesis to Yes if any mutation was made via point mutation methods
   useEffect(() => {
@@ -446,6 +488,110 @@ export default function IsolateForm() {
     setFormData(prev => ({ ...prev, other_genes: prev.other_genes.filter((_, index) => index !== indexToRemove) }));
   };
 
+  // Handle strain selection - either new or existing
+  const handleStrainSelection = (value: string) => {
+    console.log('Strain selection changed to:', value);
+    setSelectedStrainId(value);
+    
+    if (value === 'new') {
+      // Clear form for new entry
+      console.log('Clearing form for new entry');
+      setIsEditMode(false);
+      setFormData(prev => ({
+        ...prev,
+        strain_name: '',
+        genotype: {
+          ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+          pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+          argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+        },
+        other_genes: [],
+        other_mutations: '',
+        uv_mutagenesis: '',
+        uv_exposure_details: '',
+        strain_origin: '', strain_center_name: '', strain_center_location: '', strain_center_date: '',
+        sharing_lab_name: '', sharing_lab_institute: '', sharing_lab_location: '', sharing_lab_date: '',
+        inhouse_generation_date: ''
+      }));
+    } else {
+      // Populate form with existing data
+      const existing = existingIsolates.find(iso => iso.id === value || String(iso.id) === value);
+      console.log('Found existing isolate:', existing);
+      
+      if (existing) {
+        setIsEditMode(true);
+        
+        // Debug: Log the raw data
+        console.log('Raw genotype_details_json:', existing.genotype_details_json);
+        console.log('Raw other_genes_json:', existing.other_genes_json);
+        
+        // Parse JSON fields with better error handling
+        let genotype;
+        let other_genes;
+        
+        try {
+          genotype = typeof existing.genotype_details_json === 'string' 
+            ? JSON.parse(existing.genotype_details_json) 
+            : existing.genotype_details_json;
+          
+          // Ensure all required genotype fields exist
+          genotype = {
+            ku: genotype?.ku || { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+            pyrG: genotype?.pyrG || { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+            argB: genotype?.argB || { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+          };
+          console.log('Parsed genotype:', genotype);
+        } catch (e) {
+          console.error('Error parsing genotype JSON:', e);
+          genotype = {
+            ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+            pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+            argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+          };
+        }
+        
+        try {
+          if (existing.other_genes_json === "No other reported mutations in isolate") {
+            other_genes = [];
+          } else {
+            other_genes = typeof existing.other_genes_json === 'string'
+              ? JSON.parse(existing.other_genes_json)
+              : existing.other_genes_json;
+          }
+          other_genes = Array.isArray(other_genes) ? other_genes : [];
+          console.log('Parsed other_genes:', other_genes);
+        } catch (e) {
+          console.error('Error parsing other_genes JSON:', e);
+          other_genes = [];
+        }
+        
+        const populatedData = {
+          submitting_lab: existing.submitting_lab || formData.submitting_lab,
+          strain_name: existing.strain_name || '',
+          genotype: genotype,
+          other_genes: other_genes,
+          other_mutations: existing.other_mutations || '',
+          uv_mutagenesis: (existing.uv_mutagenesis || '') as 'Yes' | 'No' | '',
+          uv_exposure_details: existing.uv_exposure_details || '',
+          strain_origin: existing.strain_origin || '',
+          strain_center_name: existing.strain_center_name || '',
+          strain_center_location: existing.strain_center_location || '',
+          strain_center_date: existing.strain_center_date || '',
+          sharing_lab_name: existing.sharing_lab_name || '',
+          sharing_lab_institute: existing.sharing_lab_institute || '',
+          sharing_lab_location: existing.sharing_lab_location || '',
+          sharing_lab_date: existing.sharing_lab_date || '',
+          inhouse_generation_date: existing.inhouse_generation_date || ''
+        };
+        
+        console.log('Setting populated form data:', populatedData);
+        setFormData(populatedData);
+      } else {
+        console.error('Could not find isolate with id:', value);
+      }
+    }
+  };
+
   // Validation function --
   const validateForm = (): FormErrors => {
     const newErrors: FormErrors = {};
@@ -470,6 +616,18 @@ export default function IsolateForm() {
         return; // Stop the submission
     }
 
+    // If editing existing isolate, show confirmation
+    if (isEditMode && selectedStrainId !== 'new') {
+      setShowUpdateConfirmation(true);
+      return; // Wait for confirmation
+    }
+
+    // Proceed with submission
+    await submitForm();
+  };
+
+  // Separate function to handle actual submission
+  const submitForm = async () => {
     setIsSubmitting(true);
 
     const { genotype, other_genes, ...rest } = formData;
@@ -491,9 +649,12 @@ export default function IsolateForm() {
       if (response.ok) {
         const result = await response.json();
         setSubmitMessage(result.message || 'Isolate information submitted successfully!');
+        
+        // Reset form but keep lab selection
+        const currentLab = formData.submitting_lab;
         setFormData(prev => ({
             ...prev,
-            submitting_lab: prev.submitting_lab,
+            submitting_lab: currentLab,
             strain_name: '',
             genotype: { ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' }, pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' }, argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' }},
             other_genes: [],
@@ -504,7 +665,20 @@ export default function IsolateForm() {
             sharing_lab_name: '', sharing_lab_institute: '', sharing_lab_location: '', sharing_lab_date: '',
             inhouse_generation_date: ''
         }));
-        setErrors({}); // Clear errors on successful submission
+        
+        setSelectedStrainId('new');
+        setIsEditMode(false);
+        setErrors({});
+        
+        // Refresh existing isolates list
+        if (currentLab) {
+          const encodedLabName = encodeURIComponent(currentLab);
+          const refreshResponse = await fetch(`/api/labs/${encodedLabName}/isolates`);
+          if (refreshResponse.ok) {
+            const data = await refreshResponse.json();
+            setExistingIsolates(data.isolates || []);
+          }
+        }
       } else { 
         const errorText = await response.text();
         console.error("Server responded with an error:", errorText);
@@ -516,6 +690,40 @@ export default function IsolateForm() {
     } finally { 
       setIsSubmitting(false); 
     }
+  };
+
+  // Confirmation Modal Component
+  const UpdateConfirmationModal = () => {
+    if (!showUpdateConfirmation) return null;
+    
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+          <h3 className="text-lg font-semibold mb-4 text-gray-800">Update Existing Isolate?</h3>
+          <p className="text-sm text-gray-600 mb-6">
+            You are about to update the data for strain <strong>{formData.strain_name}</strong>. 
+            This will overwrite the existing record. Are you sure you want to continue?
+          </p>
+          <div className="flex gap-3 justify-end">
+            <button
+              onClick={() => setShowUpdateConfirmation(false)}
+              className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                setShowUpdateConfirmation(false);
+                submitForm();
+              }}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+            >
+              Yes, Update
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   if (!hasMounted) {
@@ -608,9 +816,59 @@ export default function IsolateForm() {
           {errors.submitting_lab && <p className="text-red-500 text-xs mt-1">{errors.submitting_lab}</p>}
         </div>
         <div>
-            {/* --- NEW: Added red asterisk and error message display --- */}
+            {/* --- UPDATED: Dropdown for existing strains or text input for new --- */}
             <label htmlFor="strain_name" className="block text-sm font-medium mb-2">Strain Name/ID <span className="text-red-500 font-bold">*</span></label>
-            <input type="text" id="strain_name" value={formData.strain_name} onChange={(e) => handleFormChange('strain_name', e.target.value)} className={`w-full p-3 border-2 rounded-lg ${errors.strain_name ? 'border-red-500' : 'border-[var(--silver)]'}`} placeholder="e.g., A1163, CEA17" required />
+            
+            {/* Show dropdown if lab is selected and has existing isolates */}
+            {formData.submitting_lab && existingIsolates.length > 0 ? (
+              <>
+                <select 
+                  id="strain_selection"
+                  value={selectedStrainId}
+                  onChange={(e) => handleStrainSelection(e.target.value)}
+                  className={`w-full p-3 border-2 rounded-lg mb-2 ${errors.strain_name ? 'border-red-500' : 'border-[var(--silver)]'}`}
+                  disabled={loadingExistingIsolates}
+                >
+                  <option value="new">-- Enter New Strain --</option>
+                  {existingIsolates.map((isolate) => (
+                    <option key={isolate.id} value={isolate.id}>
+                      {isolate.strain_name} (submitted {new Date(isolate.timestamp).toLocaleDateString()})
+                    </option>
+                  ))}
+                </select>
+                
+                {/* Show text input only if "new" is selected */}
+                {selectedStrainId === 'new' && (
+                  <input 
+                    type="text" 
+                    id="strain_name" 
+                    value={formData.strain_name} 
+                    onChange={(e) => handleFormChange('strain_name', e.target.value)} 
+                    className={`w-full p-3 border-2 rounded-lg ${errors.strain_name ? 'border-red-500' : 'border-[var(--silver)]'}`} 
+                    placeholder="e.g., A1163, CEA17" 
+                    required 
+                  />
+                )}
+                
+                {isEditMode && (
+                  <p className="text-sm text-blue-600 mt-1 bg-blue-50 p-2 rounded">
+                    ℹ️ <strong>Editing existing isolate.</strong> Submitting will update the record.
+                  </p>
+                )}
+              </>
+            ) : (
+              /* Show regular text input if no lab selected or no existing isolates */
+              <input 
+                type="text" 
+                id="strain_name" 
+                value={formData.strain_name} 
+                onChange={(e) => handleFormChange('strain_name', e.target.value)} 
+                className={`w-full p-3 border-2 rounded-lg ${errors.strain_name ? 'border-red-500' : 'border-[var(--silver)]'}`} 
+                placeholder="e.g., A1163, CEA17" 
+                required 
+              />
+            )}
+            
             {errors.strain_name && <p className="text-red-500 text-xs mt-1">{errors.strain_name}</p>}
         </div>
         <div className="space-y-2 p-4 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
@@ -699,8 +957,11 @@ export default function IsolateForm() {
         <div className="space-y-2 p-4 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}><h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--slate-gray)' }}>Strain Origin</h3><select id="strain_origin" value={formData.strain_origin} onChange={(e) => handleFormChange('strain_origin', e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}><option value="">Select origin...</option><option value="Strain Center">From a Strain Center</option><option value="Shared by Lab">Shared by Another Lab</option><option value="In-house">Generated In-house</option></select>{formData.strain_origin === 'Strain Center' && (<div className="grid md:grid-cols-3 gap-4 mt-2 p-2 bg-gray-50 rounded"><input type="text" value={formData.strain_center_name} onChange={(e) => handleFormChange('strain_center_name', e.target.value)} className="p-2 border rounded" placeholder="Name of Center" /><input type="text" value={formData.strain_center_location} onChange={(e) => handleFormChange('strain_center_location', e.target.value)} className="p-2 border rounded" placeholder="Location of Center" /><input type="date" value={formData.strain_center_date} onChange={(e) => handleFormChange('strain_center_date', e.target.value)} className="p-2 border rounded" placeholder="Date Sent" /></div>)}{formData.strain_origin === 'Shared by Lab' && (<div className="grid md:grid-cols-2 gap-4 mt-2 p-2 bg-gray-50 rounded"><input type="text" value={formData.sharing_lab_name} onChange={(e) => handleFormChange('sharing_lab_name', e.target.value)} className="p-2 border rounded" placeholder="Name of Lab" /><input type="text" value={formData.sharing_lab_institute} onChange={(e) => handleFormChange('sharing_lab_institute', e.target.value)} className="p-2 border rounded" placeholder="Institute of Lab" /><input type="text" value={formData.sharing_lab_location} onChange={(e) => handleFormChange('sharing_lab_location', e.target.value)} className="p-2 border rounded" placeholder="Location of Lab" /><input type="date" value={formData.sharing_lab_date} onChange={(e) => handleFormChange('sharing_lab_date', e.target.value)} className="p-2 border rounded" placeholder="Date Received" /></div>)}{formData.strain_origin === 'In-house' && (<div className="mt-2 p-2 bg-gray-50 rounded"><input type="date" value={formData.inhouse_generation_date} onChange={(e) => handleFormChange('inhouse_generation_date', e.target.value)} className="w-full p-2 border rounded" placeholder="Date Generated" /></div>)}</div>
         <div><label htmlFor="other_mutations" className="block text-sm font-medium mb-2">Other General Genotype Info</label><textarea id="other_mutations" value={formData.other_mutations} onChange={(e) => handleFormChange('other_mutations', e.target.value)} rows={3} className="w-full p-3 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., Reporter::GFP, general strain background notes, etc." /></div>
         {submitMessage && (<div className={`p-4 rounded-lg text-center ${submitMessage.includes('Error') || submitMessage.includes('Please fill') ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>{submitMessage}</div>)}
-        <div className="flex justify-end"><button type="submit" disabled={isSubmitting} className="px-8 py-3 rounded-lg font-medium btn-primary disabled:opacity-50">{isSubmitting ? 'Submitting...' : 'Submit Isolate'}</button></div>
+        <div className="flex justify-end"><button type="submit" disabled={isSubmitting} className="px-8 py-3 rounded-lg font-medium btn-primary disabled:opacity-50">{isSubmitting ? 'Submitting...' : (isEditMode ? 'Update Isolate' : 'Submit Isolate')}</button></div>
       </form>
+      
+      {/* Update Confirmation Modal - render outside form */}
+      <UpdateConfirmationModal />
     </div>
   );
 }

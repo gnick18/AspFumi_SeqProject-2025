@@ -20,6 +20,8 @@ export interface IsolateData {
   sharing_lab_date?: string; inhouse_generation_date?: string;
   genotype_details_json: string; other_genes_json: string; other_mutations: string;
   uv_mutagenesis?: string; uv_exposure_details?: string;
+  // New fields for sample tracking
+  sample_received?: boolean; sample_received_date?: string; unique_strain_id?: string;
 }
 
 export interface ContactLogEntry {
@@ -245,6 +247,11 @@ export default function AdminPage() {
     { key: 'longitude', header: 'Lng' }, { key: 'match_level', header: 'Match' },
   ];
   const isolateColumns: Column[] = [
+    // Sample tracking columns - put at the front for visibility
+    { key: 'sample_received', header: 'Received?', type: 'checkbox', dateField: 'sample_received_date' },
+    { key: 'sample_received_date', header: 'Date Received', type: 'date' },
+    { key: 'unique_strain_id', header: 'Unique ID', readonly: true },
+    // Original columns
     { key: 'submitting_lab', header: 'Submitting Lab' },
     { key: 'strain_name', header: 'Strain Name' },
     { key: 'strain_origin', header: 'Origin' },

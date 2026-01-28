@@ -95,6 +95,20 @@ export async function PUT(request: NextRequest) {
   try {
     const updatedRow: IsolateData = await request.json();
     const sql = neon(process.env.POSTGRES_URL!);
+    
+    // Generate unique_strain_id if not present
+    const uniqueStrainId = updatedRow.unique_strain_id || 
+      `${updatedRow.strain_name}__${updatedRow.submitting_lab}`;
+    
+    // Handle sample_received conversion (could be boolean or string)
+    const sampleReceived = updatedRow.sample_received === true || 
+      updatedRow.sample_received === 'true';
+    
+    // Handle sample_received_date (null if not received or empty string)
+    const sampleReceivedDate = sampleReceived && updatedRow.sample_received_date 
+      ? updatedRow.sample_received_date 
+      : null;
+    
     await sql`
       UPDATE isolate_submissions
       SET
@@ -109,7 +123,10 @@ export async function PUT(request: NextRequest) {
         sharing_lab_location = ${updatedRow.sharing_lab_location as string},
         genotype_details_json = ${updatedRow.genotype_details_json as string},
         other_genes_json = ${updatedRow.other_genes_json as string},
-        other_mutations = ${updatedRow.other_mutations as string}
+        other_mutations = ${updatedRow.other_mutations as string},
+        sample_received = ${sampleReceived},
+        sample_received_date = ${sampleReceivedDate},
+        unique_strain_id = ${uniqueStrainId}
       WHERE id = ${updatedRow.id};
     `;
     return NextResponse.json({ success: true, updatedRow: updatedRow });
