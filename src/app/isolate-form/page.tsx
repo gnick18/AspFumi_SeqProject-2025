@@ -155,7 +155,8 @@ export default function IsolateForm() {
   const [loadingLabs, setLoadingLabs] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
 
-  // New state for editing existing isolates
+    // New state for editing existing isolates
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [existingIsolates, setExistingIsolates] = useState<any[]>([]);
   const [loadingExistingIsolates, setLoadingExistingIsolates] = useState(false);
   const [selectedStrainId, setSelectedStrainId] = useState<string>('new');
