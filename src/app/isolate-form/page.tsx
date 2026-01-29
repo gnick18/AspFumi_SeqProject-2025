@@ -13,6 +13,8 @@ interface MutationInfo {
   hasMarkerReplacement: 'Yes' | 'No' | '';
   wasUVMutagenesis: 'Yes' | 'No' | '';
   mutationDate: string;
+  isComplement: 'Yes' | 'No' | '';
+  complementGene: string; // The gene used for complementation
 }
 
 interface KuMutationInfo extends MutationInfo {
@@ -117,18 +119,20 @@ const MutationRow = ({
               <div className="grid grid-cols-3 gap-4 items-center">
                 <label className="text-sm italic">Marker gene name:</label>
                 <input type="text" value={data.markerGene} onChange={(e) => handleFormChange(`genotype.${mutationKey}.markerGene`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
-                {/* Tooltip commented out - issue appears to be fixed
-                <div className="col-span-2 relative">
-                  <input type="text" value={data.markerGene} onChange={(e) => handleFormChange(`genotype.${mutationKey}.markerGene`, e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
-                  <div className="marker-gene-tooltip">
-                    <div className="tooltip-arrow"></div>
-                    <div className="tooltip-content">
-                      <p className="text-xs font-semibold mb-1">⚠️ Known Issue</p>
-                      <p className="text-xs">This field loses focus after each letter. Please click back in the box to continue typing. We're working on a fix!</p>
-                    </div>
-                  </div>
-                </div>
-                */}
+              </div>
+            )}
+            <div className="grid grid-cols-3 gap-4 items-center">
+              <label className="text-sm italic">Is this gene complemented?</label>
+              <select value={data.isComplement} onChange={(e) => handleFormChange(`genotype.${mutationKey}.isComplement`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
+                <option value="">Select...</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            {data.isComplement === 'Yes' && (
+              <div className="grid grid-cols-3 gap-4 items-center">
+                <label className="text-sm italic">Complement gene name:</label>
+                <input type="text" value={data.complementGene || ''} onChange={(e) => handleFormChange(`genotype.${mutationKey}.complementGene`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., pyrGAf, ku70Af" />
               </div>
             )}
             <div className="grid grid-cols-3 gap-4 items-center">
@@ -167,9 +171,9 @@ export default function IsolateForm() {
     submitting_lab: '',
     strain_name: '',
     genotype: {
-      ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
-      pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
-      argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+      ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
+      pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
+      argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
     },
     other_genes: [],
     other_mutations: '',
@@ -278,19 +282,6 @@ export default function IsolateForm() {
     }
   }, [formData.submitting_lab, isAuthenticated]);
 
-  // Auto-set UV mutagenesis to Yes if any mutation was made via point mutation methods
-  useEffect(() => {
-    const hasAnyPointMutation =
-      formData.genotype.ku.wasUVMutagenesis === 'Yes' ||
-      formData.genotype.pyrG.wasUVMutagenesis === 'Yes' ||
-      formData.genotype.argB.wasUVMutagenesis === 'Yes' ||
-      formData.other_genes.some(gene => gene.wasUVMutagenesis === 'Yes');
-    
-    if (hasAnyPointMutation && formData.uv_mutagenesis !== 'Yes') {
-      setFormData(prev => ({ ...prev, uv_mutagenesis: 'Yes' }));
-    }
-  }, [formData.genotype.ku.wasUVMutagenesis, formData.genotype.pyrG.wasUVMutagenesis, formData.genotype.argB.wasUVMutagenesis, formData.other_genes, formData.uv_mutagenesis]);
-
   const handlePasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
     
@@ -366,10 +357,17 @@ export default function IsolateForm() {
     if (formData.genotype.ku.present === 'Yes') {
       const kuType = formData.genotype.ku.kuType || 'ku';
       const isPointMutation = formData.genotype.ku.wasUVMutagenesis === 'Yes';
+      const isComplement = formData.genotype.ku.isComplement === 'Yes';
+      
       let text = isPointMutation ? `${kuType}-` : `Δ${kuType}`;
       if (formData.genotype.ku.hasMarkerReplacement === 'Yes' && formData.genotype.ku.markerGene) {
         text = isPointMutation ? `${kuType}-::${formData.genotype.ku.markerGene}` : `Δ${kuType}::${formData.genotype.ku.markerGene}`;
       }
+      // Add complement notation: geneName::complementGene+
+      if (isComplement && formData.genotype.ku.complementGene) {
+        text = isPointMutation ? `${kuType}-::${formData.genotype.ku.complementGene}+` : `Δ${kuType}::${formData.genotype.ku.complementGene}+`;
+      }
+      
       components.push({
         id: 'ku',
         text,
@@ -380,10 +378,17 @@ export default function IsolateForm() {
     // Add pyrG mutation
     if (formData.genotype.pyrG.present === 'Yes') {
       const isPointMutation = formData.genotype.pyrG.wasUVMutagenesis === 'Yes';
+      const isComplement = formData.genotype.pyrG.isComplement === 'Yes';
+      
       let text = isPointMutation ? 'pyrG-' : 'ΔpyrG';
       if (formData.genotype.pyrG.hasMarkerReplacement === 'Yes' && formData.genotype.pyrG.markerGene) {
         text = isPointMutation ? `pyrG-::${formData.genotype.pyrG.markerGene}` : `ΔpyrG::${formData.genotype.pyrG.markerGene}`;
       }
+      // Add complement notation: geneName::complementGene+
+      if (isComplement && formData.genotype.pyrG.complementGene) {
+        text = isPointMutation ? `pyrG-::${formData.genotype.pyrG.complementGene}+` : `ΔpyrG::${formData.genotype.pyrG.complementGene}+`;
+      }
+      
       components.push({
         id: 'pyrG',
         text,
@@ -394,10 +399,17 @@ export default function IsolateForm() {
     // Add argB mutation
     if (formData.genotype.argB.present === 'Yes') {
       const isPointMutation = formData.genotype.argB.wasUVMutagenesis === 'Yes';
+      const isComplement = formData.genotype.argB.isComplement === 'Yes';
+      
       let text = isPointMutation ? 'argB-' : 'ΔargB';
       if (formData.genotype.argB.hasMarkerReplacement === 'Yes' && formData.genotype.argB.markerGene) {
         text = isPointMutation ? `argB-::${formData.genotype.argB.markerGene}` : `ΔargB::${formData.genotype.argB.markerGene}`;
       }
+      // Add complement notation: geneName::complementGene+
+      if (isComplement && formData.genotype.argB.complementGene) {
+        text = isPointMutation ? `argB-::${formData.genotype.argB.complementGene}+` : `ΔargB::${formData.genotype.argB.complementGene}+`;
+      }
+      
       components.push({
         id: 'argB',
         text,
@@ -409,10 +421,17 @@ export default function IsolateForm() {
     formData.other_genes.forEach((gene, index) => {
       if (gene.geneName) {
         const isPointMutation = gene.wasUVMutagenesis === 'Yes';
+        const isComplement = gene.isComplement === 'Yes';
+        
         let text = isPointMutation ? `${gene.geneName}-` : `Δ${gene.geneName}`;
         if (gene.hasMarkerReplacement === 'Yes' && gene.markerGene) {
           text = isPointMutation ? `${gene.geneName}-::${gene.markerGene}` : `Δ${gene.geneName}::${gene.markerGene}`;
         }
+        // Add complement notation: geneName::complementGene+
+        if (isComplement && gene.complementGene) {
+          text = isPointMutation ? `${gene.geneName}-::${gene.complementGene}+` : `Δ${gene.geneName}::${gene.complementGene}+`;
+        }
+        
         components.push({
           id: `other_${index}`,
           text,
@@ -482,7 +501,7 @@ export default function IsolateForm() {
   };
 
   const addOtherGene = () => {
-    setFormData(prev => ({ ...prev, other_genes: [ ...prev.other_genes, { geneName: '', present: 'Yes', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' } ] }));
+    setFormData(prev => ({ ...prev, other_genes: [ ...prev.other_genes, { geneName: '', present: 'Yes', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' } ] }));
   };
 
   const removeOtherGene = (indexToRemove: number) => {
@@ -502,9 +521,9 @@ export default function IsolateForm() {
         ...prev,
         strain_name: '',
         genotype: {
-          ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
-          pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
-          argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+          ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
+          pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
+          argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
         },
         other_genes: [],
         other_mutations: '',
@@ -537,17 +556,17 @@ export default function IsolateForm() {
           
           // Ensure all required genotype fields exist
           genotype = {
-            ku: genotype?.ku || { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
-            pyrG: genotype?.pyrG || { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
-            argB: genotype?.argB || { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+            ku: genotype?.ku || { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
+            pyrG: genotype?.pyrG || { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
+            argB: genotype?.argB || { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
           };
           console.log('Parsed genotype:', genotype);
         } catch (e) {
           console.error('Error parsing genotype JSON:', e);
           genotype = {
-            ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
-            pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
-            argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' },
+            ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
+            pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
+            argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' },
           };
         }
         
@@ -657,7 +676,7 @@ export default function IsolateForm() {
             ...prev,
             submitting_lab: currentLab,
             strain_name: '',
-            genotype: { ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' }, pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' }, argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '' }},
+            genotype: { ku: { present: '', kuType: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' }, pyrG: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' }, argB: { present: '', markerGene: '', hasMarkerReplacement: '', wasUVMutagenesis: '', mutationDate: '', isComplement: '', complementGene: '' }},
             other_genes: [],
             other_mutations: '',
             uv_mutagenesis: '',
@@ -931,18 +950,20 @@ export default function IsolateForm() {
                     <div className="grid grid-cols-3 gap-4 items-center">
                       <label className="text-sm italic">Marker gene name:</label>
                       <input type="text" value={gene.markerGene} onChange={(e) => handleFormChange(`other_genes.${index}.markerGene`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
-                      {/* Tooltip commented out - issue appears to be fixed
-                      <div className="col-span-2 relative">
-                        <input type="text" value={gene.markerGene} onChange={(e) => handleFormChange(`other_genes.${index}.markerGene`, e.target.value)} className="w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., hygB, pyrG" />
-                        <div className="marker-gene-tooltip">
-                          <div className="tooltip-arrow"></div>
-                          <div className="tooltip-content">
-                            <p className="text-xs font-semibold mb-1">⚠️ Known Issue</p>
-                            <p className="text-xs">This field loses focus after each letter. Please click back in the box to continue typing. We're working on a fix!</p>
-                          </div>
-                        </div>
-                      </div>
-                      */}
+                    </div>
+                  )}
+                  <div className="grid grid-cols-3 gap-4 items-center">
+                    <label className="text-sm italic">Is this gene complemented?</label>
+                    <select value={gene.isComplement} onChange={(e) => handleFormChange(`other_genes.${index}.isComplement`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }}>
+                      <option value="">Select...</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                  </div>
+                  {gene.isComplement === 'Yes' && (
+                    <div className="grid grid-cols-3 gap-4 items-center">
+                      <label className="text-sm italic">Complement gene name:</label>
+                      <input type="text" value={gene.complementGene || ''} onChange={(e) => handleFormChange(`other_genes.${index}.complementGene`, e.target.value)} className="col-span-2 w-full p-2 border-2 rounded-lg" style={{ borderColor: 'var(--silver)' }} placeholder="e.g., abcAAf" />
                     </div>
                   )}
                   <div className="grid grid-cols-3 gap-4 items-center">
